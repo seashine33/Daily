@@ -1,3 +1,3 @@
 #echo off
-git commit -m "log"
+git commit -m "%1"
 git push origin main
