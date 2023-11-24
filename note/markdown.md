@@ -84,7 +84,7 @@ See the section on [`code`](#code).
 注意这是本地图片  
 ![这是图片](./img/philly-magic-garden.jpg "Magic Gardens")
 
-添加链接
+添加链接  
 [![沙漠中的岩石图片](./img/shiprock.jpg "Shiprock")](https://markdown.com.cn)
 
 # 转义字符
