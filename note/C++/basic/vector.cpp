@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <numeric>      // accumulate
+#include <algorithm>    // min_element
 using namespace std;
 
 void try_vector(){
@@ -22,6 +24,8 @@ void try_vector(){
     for(auto &i : nums){
         cout << i << " ";
     }
+    int sum = accumulate(nums.begin(), nums.end(), 0);
+    int min = *min_element(nums.begin(), nums.end());
 }
 
 int main() {

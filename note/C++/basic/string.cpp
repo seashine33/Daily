@@ -6,6 +6,11 @@
 using namespace std;
 
 void try_string(){
+    // 初始化
+    string s3(10, 'c');
+    string s4 = string(10, 'c');
+    cout << s3 << " " << s4 << endl;
+    
     //增删改查
     string a = "123";   // 123
     a.push_back('a');   // 123a
@@ -13,6 +18,7 @@ void try_string(){
     a.pop_back();       // 123ab
     a.insert(a.begin()+1, 'x');   // 1x23ab
     a.erase(a.begin()+1);         // 123ab
+
     //分割
     string line = "1,2,3";
     vector<int> nums;

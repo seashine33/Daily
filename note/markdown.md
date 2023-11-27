@@ -49,6 +49,12 @@ for(int i=0; i<10; i++){
 ___
 当然，三种分割线渲染效果都一样
 
+# 表格
+| Syntax | Description |
+| --- | ----------- |
+| Header | Title |
+| Paragraph | Text |
+
 # 链接语法
 这是一个链接 [Markdown语法](https://markdown.com.cn)。
 
