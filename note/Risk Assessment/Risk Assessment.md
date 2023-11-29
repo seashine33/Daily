@@ -10,7 +10,7 @@
 > 以上两种方法都可能涉及到CRF场、CVaR评估、驾驶缝补的均值和方差、RPF计算不确定性的驾驶策略。
 
 推荐了几篇综述
-> 2021年《A review ofuncertainty quantification in deep learning: Techniques,applications and challenges》，深度学习中的不确定性量化综述：技术、应用和挑战  
-> 2022年《Risk_Assessment_Methodologies_for_Autonomous_Driving_A_Survey》  
+> 2021年 [深度学习中的不确定性量化综述：技术、应用和挑战](./paper/A%20review%20of%20uncertainty%20quantification%20in%20deep%20learning.md)  
+> 2022年 [自动驾驶风险评估方法综述](./paper/Risk_Assessment_Methodologies_for_Autonomous_Driving_A_Survey.md)  
 > 2023年《Uncertainties in Onboard Algorithms for Autonomous Vehicles: Challenges, Mitigation, and Perspectives》
 
