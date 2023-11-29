@@ -32,7 +32,57 @@ void try_string(){
     }
 }
 
+void demo1(){
+    string word;
+    while(cin >> word){ // win下 ctrl + z 结束输出，也就是文件结束符EOF
+        cout << word << endl;
+    }
+}
+
+void demo2() {
+    string line;
+    while(getline(cin, line)){ // win下 ctrl + z 结束输出，也就是文件结束符EOF
+        cout << line << endl;
+    }
+}
+
+void demo3() {
+    int n = -1;
+    string s = "asd";
+    if (s.size() < n){
+        cout << "s.size() < n" << endl;
+    } else {
+        cout << "s.size() >= n" << endl;
+    }
+}
+
+void demo4() {
+    string s = "11";
+    string s1 = s + "22";           // 正确
+    // string s3 = "11" + "22";        // 错误
+    string s2 = s + "22" + "33";    // 正确
+    // string s3 = "11" + "22" + s;    // 错误
+    string s3 = "11" + ("22" + s);  // 正确
+}
+
+void demo5() {
+    #include <cctype>
+    string s = "Hello";
+    cout << isalnum(s[0]) << endl;  // 字母或数字
+    cout << isalpha(s[0]) << endl;  // 字母
+    cout << iscntrl(s[0]) << endl;  // 控制字符时
+    cout << isdigit(s[0]) << endl;  // 数字
+    cout << isgraph(s[0]) << endl;  // 非空格且可以打印
+    cout << islower(s[0]) << endl;  // 小写字母
+    cout << isprint(s[0]) << endl;  // 可打印
+    cout << ispunct(s[0]) << endl;  // 标点符号
+    cout << isspace(s[0]) << endl;  // 空白（空格，横向制表符，纵向制表符、回车、换行）
+    cout << isupper(s[0]) << endl;  // 大写字母
+    cout << isxdigit(s[0]) << endl; // 十六进制数字
+    cout << tolower(s[0]) << endl;
+    cout << toupper(s[0]) << endl;
+}
 int main() {
-    try_string();
+    demo5();
     return 0;
 }
