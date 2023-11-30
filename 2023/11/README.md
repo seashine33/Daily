@@ -54,13 +54,64 @@ epoch52, 结果为7.36，难绷。
 昨天batch为16的跑了14个epoch，FDE到了1.08，算是很好了，HiVT最低也只用0.95。拿这个做个test，结果是9.72，一样的不正常。  
 - [ ] 把相关超参数全部调成初始值，再做实验，看是不是过拟合，不管是什么原因的过拟合。
 
+--train_batch_size 4  
+--val_batch_size 4  
+--test_batch_size 4  
+--devices 8  
+--dataset argoverse_v2  
+--num_historical_steps 50  
+--num_future_steps 60  
+--num_recurrent_steps 3  
+--pl2pl_radius 150  
+--time_span 10  
+--pl2a_radius 50  
+--a2a_radius 50  
+--num_t2m_steps 30  
+--pl2m_radius 150  
+--a2m_radius 150  
+
 开始看毕业第二个点。  
 
 下午去打了个台球。
 
 # 2023.11.29 周三
 - [ ] 除了调参以外，还可以把计算loss的过程改为把预测值旋转平移到世界坐标系，与真值求欧氏距离。  
-- [x] Risk Assessment帖子推荐的第一篇论文了解了一下，这是一篇介绍不确定性相关研究的综述，总的来说就是看不懂。
-- [ ] Risk Assessment帖子推荐的第一篇论文是讲AV的风险评估(RA)的，重点看看。
+- [x] Risk Assessment 帖子推荐的第一篇论文了解了一下，这是一篇介绍不确定性相关研究的综述，总的来说就是看不懂。
+- [ ] Risk Assessment 帖子推荐的第一篇论文是讲AV的风险评估(RA)的，重点看看。
 
+# 2023.11.30 周四
+- [x] 把val修改为只计算target车，训练结果正常了很多，FDE在val的最低为0.948左右。已经训练出60个epoch，其中epoch 54的值最低，拿它来test一下，结果是6.85。
+- [x] 发现了一个华点，为什么监督真值与预测值距离的loss是个负的？可能这就是反复观看，每次看都有新感觉吧。  
 
+这是 LaplaceNLLLoss
+```Python
+loc, scale = pred.chunk(2, dim=-1)  # [A, 60, 1], 位置, [A, 60, 1], 比例
+scale = scale.clone()
+with torch.no_grad():
+    scale.clamp_(min=self.eps)      # 规定下限
+nll = torch.log(2 * scale) + torch.abs(target - loc) / scale
+```
+
+这是解码得到scale的过程，elu激活函数我还能理解，为什么还要累加？
+```Python
+scale_propose_pos = torch.cumsum(
+    F.elu_(
+        torch.cat(scales_propose_pos, dim=-1).view(-1, self.num_modes, 
+            self.num_future_steps, self.output_dim), # Tensor(A, 6, 30, 2)
+        alpha=1.0) + 1.0,   # elu激活函数, x<=0时, exp(x), x>0时, x+1
+    dim=-2) + 0.1       # 数值沿时间维度累加，Tensor(A, 6, 30, 2)
+```
+
+reg_loss() 就是 LaplaceNLLLoss，这是最外层算loss的部分，这里没有用最常见的两点距离计算loss，而是xy两轴分别算loss，然后再求和。
+```Python
+reg_loss_propose = self.reg_loss(
+        traj_propose_best,
+        t[..., :self.output_dim + self.output_head]
+    ).sum(dim=-1) * reg_mask  # sum(Tensor(A, 30, 2), -1)->Tensor(A, 30)
+reg_loss_propose = reg_loss_propose.sum(dim=0) / reg_mask.sum(dim=0).clamp_(min=1)              # Tensor(30)
+reg_loss_propose = reg_loss_propose.mean()  # Tensor(1), 提议轨迹loss
+```
+
+把超参数全部调整成原先的数值了，准备完整地再练一遍，这不得跑十几天。
+
+接着看论文吧。
