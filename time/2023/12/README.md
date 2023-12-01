@@ -19,3 +19,13 @@
 > 或者说，完整轨迹就是OK的，不完整轨迹就是有问题。
 
 - [ ] test数据的编码过程有没有问题？
+> test又分了几个文件夹  
+> some_val, some_test 分别存了val和test前一千个场景  
+> some_qcnet_val, some_qcnet_test分别是其编码信息，  
+> some_result_val, some_result_test分别存了预测结果。  
+>
+> 然后就是看代码了，后面再看吧。
+
+周五下午两点半，已经不想学了。验证上面那一点竟然弄了四个小时。  
+我竟然连菜都忘了收？  
+一来就验证数据去了。
