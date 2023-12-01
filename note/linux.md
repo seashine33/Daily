@@ -1,6 +1,14 @@
-# 文件大小  
+# 命令行命令
+文件大小  
 sudo du -sh *
 
+文件夹下文件数目  
+ls -l |grep "^-" | wc -l
+
+复制文件夹下前一千个文件  
+ls |head -n 1000 |xargs -i cp {} /temp
+
+## 
 # 解压  
 tar -zxvf 压缩文件名.tar.gz
 
