@@ -8,9 +8,16 @@ ls -l |grep "^-" | wc -l
 复制文件夹下前一千个文件  
 ls |head -n 1000 |xargs -i cp {} /temp
 
-## 
-# 解压  
-tar -zxvf 压缩文件名.tar.gz
+
+# zip  
+## 解压
+> tar -xvf FileName.tar  
+> tar -zxvf FileName.tar.gz  
+> unzip FileName.zip  
+## 压缩
+> tar -cvf FileName.tar DirName  
+> gzip FileName // 只能压缩文件
+> zip -r FileName.zip DirName
 
 # 下载  
 wget -P ~/code/Human-Trajectory-Prediction-via-Neural-Social-Physics-main/data/SDD_ini/annotations -c http://vatic2.stanford.edu/stanford_campus_dataset.

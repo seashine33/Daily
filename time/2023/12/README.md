@@ -47,6 +47,7 @@
 > 
 > QCNet原始超参数，version_1，epoch_43，FDE 1.22，bFDE：1.915  
 > 新参数，version_1，epoch_43
+> 在MEC上处理。
 
 ## 2、写场景介绍，画场景图。
 > 打算看看论文，看不下去。  
@@ -60,3 +61,20 @@
 
 > 代码终于可以跑啦，轻松多了。  
 > 发现QCNet初始数据可以以batch_size 16跑，可以，理论上四天多就可以跑完。  
+
+# 2023.12.5 周二
+## 1、QCNet 实验
+> 跑实验，占用率太高了只剩二十几兆。  
+> 玩了会MEC，准备把代码备份一下。  
+> 把所有的结果都放到q1里面去了，减小q3的大小。  
+> 把数据备份到U盘了，然后拷了一份到MEC上，给MEC装上QCNet的环境。  
+> 现在正在跑的代码大概1.5h一个epoch，4天跑完，这4天把已有的模型测一下。  
+> 每次配环境的时候，需要把map_file移到环境文件夹下，今天发现原来是初始化am时没有指定文件夹。  
+
+> 新建了q7，用来实现经过几个月沉淀的方案。  
+> 首先把代码整理了一下，主要删除了一些用于av1与av2兼容的代码，主要是head。  
+> 
+
+## 2、Risk Assessment方法
+> [碰撞评估综述](/note/Risk%20Assessment/node/Risk_Assessment_Methodologies_for_Autonomous_Driving_A_Survey.md)
+> 
