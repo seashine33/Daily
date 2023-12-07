@@ -42,12 +42,14 @@
 > 然后这个数据我是拿QCNet的原始超参数进行的test，与训练过程的test不同，后面我要进行多次实验。
 
 - [ ] 超参数调整，test过程的超参数设置对结果的影响如何。
-> QCNet原始超参数，version_16，epoch_54，FDE 1.20，bFDE：1.899  
-> 新参数，version_16，epoch_54  
+> QCNet原始超参数, q3, version_5, epoch_54, FDE 1.20, bFDE：1.899  
+> 新参数, q3, version_5, epoch_54, 这个是0.000001的区别
 > 
 > QCNet原始超参数，version_1，epoch_43，FDE 1.22，bFDE：1.915  
-> 新参数，version_1，epoch_43
+> 新参数，version_1，epoch_43, ？竟然结果一样, 哦，有0.0000001的区别
 > 在MEC上处理。
+>
+> 所以结论是，这些半径什么的超参数不重要。
 
 ## 2、写场景介绍，画场景图。
 > 打算看看论文，看不下去。  
@@ -64,7 +66,7 @@
 
 # 2023.12.5 周二
 ## 1、QCNet 实验
-> 跑实验，占用率太高了只剩二十几兆。  
+> 跑实验，显存占用率太高了只剩二十几兆。  
 > 玩了会MEC，准备把代码备份一下。  
 > 把所有的结果都放到q1里面去了，减小q3的大小。  
 > 把数据备份到U盘了，然后拷了一份到MEC上，给MEC装上QCNet的环境。  
@@ -77,4 +79,36 @@
 
 ## 2、Risk Assessment方法
 > [碰撞评估综述](/note/Risk%20Assessment/node/Risk_Assessment_Methodologies_for_Autonomous_Driving_A_Survey.md)
+
+
+# 2023.12.6 周三
+> 睡到中午起  
+> 吃饭接着睡午觉  
+> 三点起来去东湖玩，七个人  
+> 吃完饭打牌  
+> 一点到寝室睡觉  
+
+# 2023.12.7 周四
+## 1、QCNet实验
+> 感觉用初始参数效果会更好啊。
+> 38个epoch就到了自己设的参数了。
+
+## 2、Risk Assessment方法
+> [碰撞评估综述](/note/Risk%20Assessment/node/Risk_Assessment_Methodologies_for_Autonomous_Driving_A_Survey.md)
+
+## 3、毕业论文
+> 了解了一下，这TM才是最重要的部分，甚至看什么综述都属于是非常浪费时间   
+> 开始急躁了，在实验室根本不能得到安宁了  
+> 后面得调作息 + 去图书馆了  
+
+## 4、修改QCNet代码
+> 论文看不进去，想该改改代码。
+> 先不上手改吧，先把结构图画出来。
+
+
+- [ ] 实验：QCNet去掉第二次解码，结果是多少？
+> 结果
 > 
+- [ ] 改代码
+> 1、QCNet的m是由(6,128)repeat出来的，而我的是(A,128)repeat出来的，检查保证统一，再编码的部分，m的维度也要实验一下，这大概就能弄懂为什么会有transpose了吧  
+> 2、QCNet的refine是初始值的修正值，也就是refine+rough才是第二次预测的结果。相应的scale也有区别，这要做实验确认哪个效果好。
