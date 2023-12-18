@@ -184,7 +184,7 @@
 # 周任务
 - [ ] 划分论文第二部分整体框架
   - 首先把模型流程，也就是把代码流程先复述一遍。
-  - 缺的模块，写在背景知识里面。比如FourierEmbedding，AttentionLayer。
+  - 缺的模块，写在背景知识里面。比如AttentionLayer。
 - [ ] 按顺序将轨迹预测的整个过程描述出来
   - [ ] 0、图注意力网络
   - [x] 1、地图编码
@@ -193,7 +193,6 @@
   - [ ] 4、再编码
   - [ ] 5、精细预测
   - [ ] 6、损失函数
-- [x] 消融实验：transpose的意义
 - [ ] 小论文
   - [ ] 介绍
   - [ ] 相关工作
@@ -235,11 +234,9 @@
   - 写的有缺陷，但着实太混乱了一点，应该理顺一点找到核心。
 
 # 2023.12.12 周二
-## 今日任务
-- [x] QCNet消融实验：修改代码，去掉QCNet的refine部分。早上9：45开始跑，大概57分钟train一个epoch。
-  - [ ] q7_mec跑了40多个epoch就断了，刚好作为无refine的对比。对比结果：
-- [x] 大论文：交通参与者编码
-- [ ] 大论文：AttentionLayer的说明
+## 实验
+- [x] q7_mec：QCNet初始代码，跑了40多个epoch就断了。
+- [x] q8_mec：QCNet消融实验，无refine部分。早上9：45开始跑，大概57分钟train一个epoch。结果：val-minFDE：0.9589，
 - [ ] 模范代码：Q7
   - [x] 预处理：将is_turn_direction, is_traffic_control加入。
   - [x] 预处理：self._object_types = ['AV', 'AGENT', 'OTHERS']
@@ -250,6 +247,11 @@
     - [x] 改了batch_s和batch_pl，改了一版出来，在Q3和Q3_mec里面，主要在MEC里测试。
     - [x] 改了edge_index_pl2a，但结果与原始的不一样
     - [x] 知道了为什么要transpose，torch_cluster.radius的batch_x和batch_y必须是排过序的
+
+## 论文
+- [x] 大论文：交通参与者编码
+- [ ] 大论文：AttentionLayer的说明
+
   
 ## 进度
 - 上午看油管视频，就把Agent代码看了一遍，没有写。
@@ -263,8 +265,17 @@
   - 破案啦，torch_cluster.radius的batch_x和batch_y必须是排过序的，所以啊，时间维度必须得在最前。
   - 得，一下午就看个这。
 
-# 2023.12.14
-## 今日任务
+# 2023.12.14 周四
+## 代码
+- [x] 实验Q7-1，也就是我自己的模型改的第一版，
+  - [x] 实验结果1: 1.167726, 1.86217。原始结果，1.156530, 1.8509。
+  - [ ] 实验结果2：
+- [x] 实验Q7-2，也就是把预处理修改了一波，模型整体还是QCNet
+  - [x] 加入了type_a_emb，包括预处理的和模型里的。
+  - [x] map_encode的self.int_pl_emb我发现源代码是3，但它的输出类型是bool，改成2了
+  - [x] 加入了self.turn_pl_emb和self.cont_pl_emb，并加入了x_pl_categorical_embs。
+
+## 论文
 - [x] 大论文：交通参与者编码
 - [ ] 大论文：AttentionLayer的说明
   - [x] 主题结构图
@@ -275,18 +286,84 @@
 ## 进度
 - 上午把交通参与者编码部分写了，还写了一部分图注意力网络。
 - 下午现实看了四五十分钟的百度百科，然后把图注意力机制的代码又翻了翻，画了两个图，当然第二个应该用公式表示。图注意力网络还是没写完。
-- [x] 实验Q7-1，也就是我自己的模型改的第一版，
-- [ ] 实验Q7-2，也就是把预处理修改了一波，模型整体还是QCNet
-  - [x] 加入了type_a_emb，包括预处理的和模型里的。
-  - [x] map_encode的self.int_pl_emb我发现源代码是3，但它的输出类型是bool，改成2了
-  - [x] 加入了self.turn_pl_emb和self.cont_pl_emb，并加入了x_pl_categorical_embs。
+
 
 ## 开会
-要么一个研究点，要么两个研究点，一个应用系统。
-1、查重要求：单章不过5%，全文10%。
-2、不能有相关技术介绍。所以可能只有四章，不过要达到三万个字。
-3、每一章算法都要有结果，不能单独一章
+要么一个研究点，要么两个研究点，一个应用系统。  
+1、查重要求：单章不过5%，全文10%。  
+2、不能有相关技术介绍。所以可能只有四章，不过要达到三万个字。  
+3、每一章算法都要有结果，不能单独一章  
 4、核心问题凝练，设计阶段有什么问题，提出一种方法。用什么方法解决，用什么方法实现
-5、参考文献要近五年的。国内论文也要加，至少十篇。
-6、一月底定稿，三月十几号预答辩，四月初送审
-7、路测，应用来，清华数据集，轨迹预测碰撞验证，2045测试场，碰撞算法，应用场景，Unity
+5、参考文献要近五年的。国内论文也要加，至少十篇。  
+6、一月底定稿，三月十几号预答辩，四月初送审  
+7、路测，应用来，清华数据集，轨迹预测碰撞验证，2045测试场，碰撞算法，应用场景，Unity  
+
+# 2023.12.15 周五
+## 总结
+- 上午
+  - 主要在改代码，创建了一个train.md，专门用来记录各个版本代码是什么意思。用md写表格挺好的，本来准备用csv，结果发现用Excel和VScode插件打开编码格式不同，果断放弃。现在在VScode下用md记笔记的唯一缺憾就是没有目录了。
+  - 把预处理的bug解决了一下，现在用v2预处理的Q7_2可以跑了。
+  - 然后发现Q7-1的代码只是换了顺序，再编码部分没有改。创建Q7-3，改了再编码部分，后面的精解码还没改好。
+- 下午
+  - 计划：改好Q7-3。然后写完大论文图部分。然后再看看QCNet论文。
+  - 一下午就只改了个Q7-3的代码，而且核心问题还没解决，碰见麻烦了。
+## 代码
+- [ ] 创建Q7_2_mec：贴了一份Q7-2代码到MEC中
+  - [x] debug: 预处理中的agent_type的维度创建错了。
+  - [x] 开始处理预处理版本：main_qcnet_1。
+  - [ ] 实验结果：
+- [ ] 代码Q7-3，基于Q7-1，把refine从预测完整，修改为预测微调值。
+  - 检查了一遍Q7-1，发现我只是把代码顺序变了一下，核心的再编码我没有动，还是GRU将20帧128叠成128。怪不得效果几乎差不多。
+  - [x] 修改代码：再编码部分
+  - [x] 修改代码：精解码部分
+    - 碰上问题了，我的 m 编码后为 Tensor(3, A*6, 128), 然后取三次 Tensor(A*6, 128), 对应三次解码，但我只能计算，不能就着把 m 给改了，不然就会说我原地修改。
+    - 相应的报错：one of the variables needed for gradient computation has been modified by an inplace operation: [torch.cuda.FloatTensor [630, 128]], which is output 0 of AsStridedBackward0, is at version 39; expected version 38 instead. Hint: enable anomaly detection to find the operation that failed to compute its gradient, with torch.autograd.set_detect_anomaly(True).
+    - 还是改了一版代码，但没有把m很好的用起来。
+  - [ ] 跑实验：
+
+# 2023.12.18 周一
+## 总结
+- 首先是实验
+  - Q7_1的第二次实验差不多了，结果比第一次结果好一点。但没啥用。
+  - 其次是Q7_2_mec的实验，这个我以为在跑，其实根本没有，只是train数据集看起来预处理好了，但实际上不能加载进来。
+- 然后是周一总结
+  - 我发现我这段时间大部分都在写代码相关的东西，而不是真的在写论文。整体代码确实必须得实验，但讲真v2的预处理能出来咱就用，不行就算了。
+  - 上周写了一周，但没写多少，还是压力不够。那就摊派吧。
+- 走神
+  - [邓小平留下十大政治遗产](https://news.china.com/domesticgd/10000159/20170219/30265228.html)
+
+## 今日任务
+- [x] 图注意力介绍完成。
+  - [Gentle introduction to graph neural and graph convolutional networks](https://www.avenga.com/magazine/graph-neural-networks-and-graph-convolutional-networks/)
+  - [PyG中Message Passing机制详解](https://blog.csdn.net/weixin_43872709/article/details/123679423)
+  - [Creating Message Passing Networks](https://pytorch-geometric.readthedocs.io/en/latest/notes/create_gnn.html#creating-message-passing-networks)
+  - 1、神经网络与注意力机制的介绍；2、图数据结构的介绍；3、图神经网络的思想；4、图神经网络的流程（原理图）；5、图神经网络的流程（实现）
+  - 完成情况：大体框架完成。
+- [x] 总结QCNet论文提出的创新。
+  - 过去的工作：
+    - factorized attention-based Transformers, 每个时空场景。
+    - 锚，长时预测
+  - 总结
+    - 首先，我们注意到，有可能实现更快的在线推理，同时也受益于因子化注意力的力量，但现有方法使用的以代理为中心的编码方案[25，27，46，56]是一个障碍。每次新的数据帧到达时，观察窗口向前滑动一步，并与其前一个窗口基本重叠，这为模型重用先前计算的编码提供了机会。然而，以代理为中心的方法需要根据最新的代理状态的位置对输入进行规范化，因此每当观察窗口向前滑动时，都需要对场景元素进行重新编码。为了解决这个问题，我们引入了一种**以查询为中心**的场景编码范式（见图1）。我们设计理念的关键在于在局部时空参考系中处理所有场景元素，并学习独立于全局坐标的表示。这种策略使我们能够缓存和重用以前计算的编码，将计算扩展到所有观察窗口，从而减少推理延迟。不变的场景特征也可以在场景中的所有目标代理之间共享，以实现多代理解码的并行性。
+    - 其次，为了更好地利用场景编码进行多模式和长期预测，我们使用**无锚查询**来递归地检索场景上下文，并让它们在**每次递归时解码一小段未来的路点**。这种循环机制通过允许查询在预测不同地平线上的路点时关注不同的场景上下文，减轻了查询的建模负担。递归解码器预测的高质量轨迹在随后的细化模块中充当动态锚点，在该模块中，我们使用基于锚点的查询来基于场景上下文细化轨迹建议。因此，我们基于查询的解码管道将无锚方法的灵活性融入到基于锚的解决方案中，两全其美，促进了多模式和长期预测。
+  - 方法
+    - 1、输入和输出公式
+    - 2、以查询为中心的场景编码
+      - 本地时空坐标系
+      - 场景元素嵌入
+      - 相对时空位置嵌入
+      - Self-Attention for Map Encoding：自注意力
+      - Factorized Attention for Agent Encoding：因子化注意力。
+        - 这好像在[wayformer](https://zhuanlan.zhihu.com/p/582632248)里面提到。
+    - 3、基于query的轨迹解码
+      - Mode2Scene and Mode2Mode Attention：提议和细化模块都使用类似DETR的体系结构。类似于DETR[4]中对象查询的概念，每个查询负责解码K个轨迹模式中的一个。在Mode2Scene Attention中，我们使用cross Attention层来更新具有多个上下文的模式查询，包括目标代理的历史编码、映射编码和相邻代理的编码。在Mode2Scene Attention之后，K模式通过Mode2Mode自注意力相互查询“talk”，以提高多种模式的多样性。【就很扯，明显是scene2mode啊。】
+      - Reference Frames of Mode Queries（模式查询的参考框架）：共享相同的场景编码。
+      - Anchor-Free Trajectory Proposal.
+      - Anchor-Based Trajectory Refinement
+    - 4、训练目标：损失函数
+- [ ] 确定小论文大纲
+  - 还真得按编码解码写。很显然，QCNet的创新点一是时间复杂度分析，二是结构。
+  - 所以我得想办法造词。
+
+
+
