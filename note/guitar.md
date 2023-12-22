@@ -12,7 +12,7 @@
     - 6表示每小节有几拍
     - 8表示几分音符是一拍，也就是全音符是8拍
 ## 连线符号
-- H: [击弦](https://www.bilibili.com/video/BV1mb4y1q7uT)
+- H：[击弦](https://www.bilibili.com/video/BV1mb4y1q7uT)
 - 无：延音线，只用弹一下
 - P：[勾弦](https://www.bilibili.com/video/BV1eU4y1g74r)
 - S：[滑弦](https://www.bilibili.com/video/BV1PU4y1M7kq)
