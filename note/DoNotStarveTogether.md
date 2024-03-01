@@ -31,7 +31,7 @@
     - wget -P ~/steamcmd https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
     - tar -xvzf steamcmd_linux.tar.gz
     - ./steamcmd.sh
-      - force_install_dir /home/dst
+      - force_install_dir /home/qh/dst
       - login anonymous
       - app_update 343050 validate
       - exit

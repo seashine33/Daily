@@ -79,10 +79,27 @@ void demo5() {
     cout << isspace(s[0]) << endl;  // 空白（空格，横向制表符，纵向制表符、回车、换行）
     cout << isupper(s[0]) << endl;  // 大写字母
     cout << isxdigit(s[0]) << endl; // 十六进制数字
-    cout << tolower(s[0]) << endl;
-    cout << toupper(s[0]) << endl;
+    cout << tolower(s[0]) << endl;  // 返回对应小写字母
+    cout << toupper(s[0]) << endl;  // 返回对应大写字母
+}
+
+void demo6(){
+    string str("Hello World!!!");
+    decltype(str.size()) punct_cnt = 0;
+    for (auto c : str){     // c 为 char 类型
+        if (ispunct(c)) punct_cnt++;
+    }
+    cout << punct_cnt << " punctuation characters in " << str << endl;
+}
+
+void demo7() {
+    string str("Hello World!!!");
+    for (auto &c : str){
+        c = toupper(c);
+    }
+    cout << str << endl;
 }
 int main() {
-    demo5();
+    demo7();
     return 0;
 }
