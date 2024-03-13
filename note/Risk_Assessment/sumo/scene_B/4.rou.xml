@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<routes xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <vType id="type1" accel="2.0" decel="3.5" sigma="0.5" length="5" maxSpeed="15" />
+  <vType id="type2" accel="2.0" decel="3.5" sigma="0.5" length="5" maxSpeed="10" />
+
+
+
+    <vehicle id="ego" type="type2" depart="0" color="1,0,0" departSpeed="10">
+      <route edges="E0"/>
+    </vehicle>
+
+      <vehicle id="1" type="type1" depart="5" color="0,0,1" departLane="1" departSpeed="10">
+      <route edges="E0"/>
+    </vehicle>
+
+
+</routes>

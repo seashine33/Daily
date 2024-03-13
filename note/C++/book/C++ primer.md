@@ -216,47 +216,52 @@ vector::size_type       // err
 - 类似指针类型，迭代器也提供了对对象的间接访问，
 - 迭代器有有效和无效之分，有效迭代器指向某个元素或指向容器中尾元素的下一位置，其他所有情况都属于无效。
 ### 3.4.1 使用迭代器
-- 支持迭代器的类型都拥有begin和end的成员。其中begin成员负责返回指向第一个元素的迭代器，end成员负责返回指向尾元素的下一位置的迭代器，也叫**尾后迭代器**。
-- 如果容器为空，begin和end返回的迭代器相同，都为**尾后迭代器**。
+- 最基础的迭代器
+  - 支持迭代器的类型都拥有begin和end的成员。其中begin成员负责返回指向第一个元素的迭代器，end成员负责返回指向尾元素的下一位置的迭代器，也叫**尾后迭代器**。
+  - 如果容器为空，begin和end返回的迭代器相同，都为**尾后迭代器**。
+  - 一般来说，我们不在意迭代器具体的类型是什么。
 ```C++
 auto b = v.begin(), e = v.end();
 ```
-- 一般来说，我们不在意迭代器具体的类型是什么。
+-------------------------------------
 - 迭代器运算符
+  - 解引用符：*
+  - 箭头运算符：->
+  - 标准库容器中更普遍的定义了 == 与 != ，而非 < 。
 ```C++
+// 迭代器运算符
 *iter       // 解引用迭代器，返回迭代器iter所指元素的引用
 iter->mem   // 解引用iter并获取该元素名为mem的成员，等价于(*iter).mem
 ++iter      // 令iter指向容器中的下一元素
 --iter      // 令iter指向容器中的上一元素
 iter1 == iter2  // 判断两迭代器是否指向同一元素
 ```
-- 将string对象的首字母通过迭代器改成大写
 ```C++
+// 将string对象的首字母通过迭代器改成大写
 string s("some string");
 if (s.begin() != s.end()){
     auto b = s.begin();
     *b = toupper(*b);   // 改为大写
 }
 ```
-- 将string对象的所有字母通过迭代器改成大写
 ```C++
+// 将string对象的所有字母通过迭代器改成大写
 string s("some string");
 for (auto it = s.beigin(); it != s.end() && !isspace(*it); ++it){
     *it = toupper(*it);   // 改为大写
 }
 ```
-- 标准库容器中更普遍的定义了 == 与 != ，而非 < 。
-
-- 迭代器类型
+----------------------------------------------
 ```C++
+// 迭代器类型：可读可写类型、只读类型
 vector<int>::iterator it;           // it能读写vector<int>元素
 string::iterator it2;               // it2能读写string元素
 
 vector<int>::const_iterator it3;    // it3能只能读，不能写vector<int>元素
 string::const_iterator it4;         // it3能只能读，不能写string元素
 ```
-- const_iteratoe和**常量指针**差不多。如果vector对象时一个常量，那么只能用const_iteratoe，如果不是常量，既可以用iterator也可以用const_iteratoe。
-- 如果指向的对象是常量，那么begin和end就会返回const_iteratoe。
+- const_iterator和**常量指针**差不多。如果vector对象时一个常量，那么只能用const_iterator，如果不是常量，既可以用iterator也可以用const_iterator。
+- 如果指向的对象是常量，那么begin和end就会返回const_iterator。
 ```C++
 vector<int> v;
 const vector<int> cv;
@@ -299,3 +304,85 @@ for (int i=0; i<10; i++){
     cout << v[i] << endl;
 }
 ```
+
+### 3.4.2 迭代器运算
+```C++
+// string和vector迭代器支持的运算
+iter + n
+iter - n
+iter1 += n
+iter1 -= n
+iter1 - iter2   // 返回两迭代器之间的距离，类型为difference_type，其为有符号数
+>, >=, <, <= 
+```
+```C++
+// 创建一个新迭代器，使其指向容器的中间位置
+auto mid = vi.begin() + vi.size()/2
+```
+```C++
+// 二分查找
+int binary_search(vector<int> v, int find){
+    auto beg = v.begin(), end = v.end();
+    auto mid = beg + (end - beg)/2;
+    while(mid != end && *mid == find){
+        if (*mid < find){   // 右边
+            beg = mid + 1;
+        } else {
+            end = mid;
+        }
+        mid = beg + (end - beg)/2;
+    }
+    if (*mid == find){
+        return mid - v.begin();
+    } else {
+        return -1;
+    }
+}
+```
+
+## 3.5 数组
+- vector长度不定，而数组在定义时长度已定。
+### 3.5.1 定义和初始化内置数组
+- 数组是一种复合类型
+  - 数组声明形如a[d]，其中a为数组名，d为数组维度。
+  - 数组维度必须是常量表达式。见40页，constexpr
+  - 注：在本地环境，g++编译时，数组长度不要求常量表达式，而在leetcode环境中，有该要求，故为了代码复用性，数组长度应定义为常量表达式。
+```C++
+int a = 10;
+int b[a] = {0};     // a为非常量表达式，该定义错误
+
+const aa = 10;      // 或 constexpr int aa = 10;
+int bb[aa] = {0};   // 正确
+```
+- 显示初始化
+  - 未定义的位会被初始化为默认值
+  - 初始值不能超过数组长度
+```C++
+constexpr int length = 10;
+int l[length] = {1, 2, 3};   // 后面7个值全是0
+int ll[2] = {1, 2, 3};  // 错误，初始值过多
+```
+- 字符数组
+  - 注意结尾时是否需要空字符。
+```C++
+char a[] = {'a', 'b', 'c'};
+char b[] = {'a', 'b', 'c', '\0'};
+char c[] = "abc";   // 自动添加空字符
+const char d[3] = "abc"     // 错误，无空间存放空字符。
+```
+- 不允许拷贝与赋值
+```C++
+int a[] = {0, 1, 2};
+int b[] = a;        // 错误，不允许使用一个数组来初始化另一个数组
+c = a;              // 不能把一个数组直接赋值给另一个数组
+```
+- 复杂的数组声明
+  - 使用括号将变脸的类型进行强调
+```C++
+int (*a1)[10] = &arr;    // a1是一个指针，指向的对象是长度为10的int型数组
+int (&a2)[10] = arr;    // a2是一个引用，引用的对象是长度为10的int型数组
+int *(&a3)[10] = ptrs;   // a3是一个引用类型，引用对象是长度为10的指针数组
+```
+### 3.5.2 访问数组元素
+
+# 结尾

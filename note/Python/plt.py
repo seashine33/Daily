@@ -13,6 +13,10 @@ def demo():
         s=100, c='blue',
         alpha=1, marker="*",
     )
+    plt.xlim(-20, 20)
+    plt.ylim(-10, 10)
+    plt.gca().set_aspect(1) # xy等轴距
+    plt.grid()  # 网格
     plt.show()
 
 if __name__ == "__main__":
