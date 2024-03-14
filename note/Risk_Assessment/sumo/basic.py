@@ -8,6 +8,9 @@ d = 2
 ld = (l**2+d**2)**0.5
 phi_ = np.arctan(d/l)   # 21.8°
 arrow_length = 5
+alpha = 0.005
+beta = 0.006
+gamma = 0.025
 ########## 风险场参数 ##########################
 
 #############################################
@@ -199,9 +202,9 @@ def demo5():
     phi_self =       0              # 自车横摆角
 
     # 动态因素
-    v_center =       0              # 他车速度大小
+    v_center =       20              # 他车速度大小
     v_center_theta = 0              # 他车速度方向
-    v_self =         60             # 自车速度大小
+    v_self =         20             # 自车速度大小
     v_self_theta =   0              # 自车速度方向
     a_center =       0              # 他车加速度大小
     a_center_theta = 0              # 他车加速度方向
@@ -212,25 +215,28 @@ def demo5():
             length_[i][j] = get_oo_length(theta[i][j], phi_self)
     x = length_ * np.cos(theta)     # 各点对应临界碰撞坐标
     y = length_ * np.sin(theta)
-    P = ((x**2 + y**2)**0.5/(X**2 + Y**2)**0.5)    # 碰撞概率：临界碰撞距离/当前两车距离
+    P = ((x**2 + y**2)**0.5/(X**2 + Y**2)**0.5)**cs1    # 碰撞概率：临界碰撞距离/当前两车距离
     Vx = v_center*np.cos(v_center_theta) - v_self*np.cos(v_self_theta)
     Vy = v_center*np.sin(v_center_theta) - v_self*np.sin(v_self_theta)
     V_delta = ((Vx**2)+(Vy**2))**0.5
     theta_V_delta = np.arctan2(Vy, Vx)
-    Z = P**cs1 * np.exp(0.002*v_center + 
-                        0.002*V_delta*abs(np.cos((theta_V_delta-theta)/2)) + 
-                        0.010*(a_center)*abs(np.cos((theta-a_center_theta)/2)))
-    for i in range(len(Z)):
-        for j in range(len(Z[i])):
-            if Z[i][j]>1.5:
-                Z[i][j]=1.5
+    # Z = P * np.exp(alpha*v_center + 
+    #                     beta*V_delta*abs(np.cos((theta_V_delta-theta)/2)) + 
+    #                     gamma*(a_center)*abs(np.cos((theta-a_center_theta)/2)))
+    Z = np.exp(alpha*v_center + 
+                beta*V_delta*abs(np.cos((theta_V_delta-theta)/2)) + 
+                gamma*(a_center)*abs(np.cos((theta-a_center_theta)/2))) - 1
+    # for i in range(len(Z)):
+    #     for j in range(len(Z[i])):
+    #         if Z[i][j]>1.5:
+    #             Z[i][j]=1.5
 
     ax = plt.subplot(1, 1, 1)
     line = [0.60, 0.70, 0.80, 0.90, 1.0, 1.5]
     # line = [0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.0, 1.5]
     # line = [0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.0, 1.5]
-    plt.contourf(X, Y, Z, line, cmap=plt.get_cmap('Blues'))
-    c = plt.contour(X, Y, Z, line, colors='black')
+    plt.contourf(X, Y, Z, 6, cmap=plt.get_cmap('Blues'))
+    c = plt.contour(X, Y, Z, 6, colors='black')
     plt.clabel(c, inline=True, fontsize=10)
     # draw_center_car()   # 自车车身
     demo6(phi_self)     # 碰撞环
@@ -257,15 +263,18 @@ def demo5_1():
     length_ = np.zeros((theta.shape[0], theta.shape[1]))
     cs1 = 0.28                  # 调整衰减速率，越小危险区域区域越大
 
+    alpha = 0.005
+    beta = 0.006
+    gamma = 0.025
     # 静态因素
     phi_self =       [0,  0,  0,  0,     0,       0, np.pi/2, np.pi]              # 自车方向角，车头朝向
 
     # 动态因素
-    v_center =       [0, 60,  0, 60,    60,      60,      60,    60]              # 速度越大，需要的跟车距离越大
+    v_center =       [0, 20,  0, 20,    20,      20,      20,    20]              # 速度越大，需要的跟车距离越大
     v_center_theta = [0,  0,  0,  0,     0,       0,       0,     0]
-    v_self =         [0, 60, 60, 60,    60,      60,      60,    60]              # 自车速度
+    v_self =         [0, 20, 20, 20,    20,      20,      20,    20]              # 自车速度
     v_self_theta =   [0,  0,  0,  0,     0,       0, np.pi/2, np.pi]
-    a_center =       [0,  0,  0, 10,    10,      10,       0,     0]              # 相对加速度，只有正值
+    a_center =       [0,  0,  0,  5,     5,       5,       0,     0]              # 相对加速度，只有正值
     a_center_theta = [0,  0,  0,  0, np.pi, np.pi/2,       0,     0]              # 相对加速度方向
 
     for k in range(0, len(phi_self)):    # len(phi_self)
@@ -274,14 +283,14 @@ def demo5_1():
                 length_[i][j] = get_oo_length(theta[i][j], phi_self[k])
         x = length_ * np.cos(theta)     # 各点对应临界碰撞坐标
         y = length_ * np.sin(theta)
-        P = ((x**2 + y**2)**0.5/(X**2 + Y**2)**0.5)    # 碰撞概率：临界碰撞距离/当前两车距离
+        P = ((x**2 + y**2)**0.5/(X**2 + Y**2)**0.5)**cs1    # 碰撞概率：临界碰撞距离/当前两车距离
         Vx = v_center[k]*np.cos(v_center_theta[k]) - v_self[k]*np.cos(v_self_theta[k])
         Vy = v_center[k]*np.sin(v_center_theta[k]) - v_self[k]*np.sin(v_self_theta[k])
         V_delta = ((Vx**2)+(Vy**2))**0.5
         theta_V_delta = np.arctan2(Vy, Vx)
-        Z = P**cs1 * np.exp(0.002*v_center[k] + 
-                            0.002*V_delta*abs(np.cos((theta_V_delta-theta)/2)) + 
-                            0.010*(a_center[k])*abs(np.cos((theta-a_center_theta[k])/2)))
+        Z = P * np.exp(alpha*v_center[k] + 
+                       beta*V_delta*abs(np.cos((theta_V_delta-theta)/2)) + 
+                       gamma*(a_center[k])*abs(np.cos((theta-a_center_theta[k])/2)))
         for i in range(len(Z)):
             for j in range(len(Z[i])):
                 if Z[i][j]>1.5:
@@ -428,13 +437,14 @@ def demo9():
     length_ = np.zeros((theta.shape[0], theta.shape[1]))
     cs1 = 0.28                  # 调整衰减速率，越小危险区域区域越大
     phi_self = [0, np.pi/4, np.pi/2, np.pi*2/3]
+    lamb =     [1.2,   1.0,     0.8,       0.5]
     for k in range(0, len(phi_self)):    # len(phi_self)
         for i in range(theta.shape[0]):
             for j in range(theta.shape[1]):
                 length_[i][j] = get_oo_length(theta[i][j], phi_self[k])
         x = length_ * np.cos(theta)     # 各点对应临界碰撞坐标
         y = length_ * np.sin(theta)
-        Z = ((x**2 + y**2)**0.5/(X**2 + Y**2)**0.5)    # 碰撞概率：临界碰撞距离/当前两车距离
+        Z = ((x**2 + y**2)**0.5/(X**2 + Y**2)**0.5)**lamb[k]    # 碰撞概率：临界碰撞距离/当前两车距离
         for i in range(len(Z)):
             for j in range(len(Z[i])):
                 if Z[i][j]>1.5:
@@ -444,7 +454,7 @@ def demo9():
         plt.contourf(X, Y, Z, line, cmap=plt.get_cmap('Blues'))
         c = plt.contour(X, Y, Z, line, colors='black')
         plt.clabel(c, inline=True, fontsize=10)
-        title = "(" + str(k+1) + ")" + "φ="+ str(int(phi_self[k]/np.pi*180)) + "°"
+        title = "(" + str(k+1) + ")" + "φ="+ str(int(phi_self[k]/np.pi*180)) + "°,λ=" + format(lamb[k], '.1f')
         ax.set_title(title, family='monospace', fontsize=10)     # Times New Roman
         draw_center_car()   # 自车车身
         demo6(phi_self[k])     # 碰撞环
@@ -455,6 +465,6 @@ def demo9():
     return
 
 if __name__ == "__main__":
-    demo5_1()
+    demo5()
     # P = (E[0]/E[1])
     # print(P)

@@ -37,11 +37,11 @@
 
     <location netOffset="0.00,0.00" convBoundary="0.00,0.00,1500.00,0.00" origBoundary="-10000000000.00,-10000000000.00,10000000000.00,10000000000.00" projParameter="!"/>
 
-    <edge id="E0" from="J0" to="J1" priority="-1" length="10000.00">
-        <lane id="E0_0" index="0" speed="60.00" length="10000.00" shape="0.00,-1.60 15000.00,-1.60"/>
+    <edge id="E0" from="J0" to="J1" priority="-1" length="1000.00">
+        <lane id="E0_0" index="0" speed="20.00" length="1000.00" shape="0.00,-1.60 1000.00,-1.60"/>
     </edge>
 
     <junction id="J0" type="dead_end" x="0.00" y="0.00" incLanes="" intLanes="" shape="0.00,0.00 0.00,-3.20"/>
-    <junction id="J1" type="dead_end" x="15000.00" y="0.00" incLanes="E0_0" intLanes="" shape="1500.00,-3.20 1500.00,0.00"/>
+    <junction id="J1" type="dead_end" x="1000.00" y="0.00" incLanes="E0_0" intLanes="" shape="1000.00,-3.20 1500.00,0.00"/>
 
 </net>

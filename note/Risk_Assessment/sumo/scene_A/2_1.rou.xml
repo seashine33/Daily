@@ -3,11 +3,11 @@
 
   <vType id="type1" accel="2.5" decel="5" sigma="0.5" length="5" maxSpeed="70" />
 
-    <vehicle id="1" type="type1" depart="0" color="0,0,1" departSpeed="30">
+    <vehicle id="1" type="type1" depart="0" color="0,0,1">
       <route edges="E0"/>
     </vehicle>
 
-    <vehicle id="2" type="type1" depart="8" color="1,0,0" departSpeed="30">
+    <vehicle id="2" type="type1" depart="5" color="1,0,0">
       <route edges="E0"/>
     </vehicle>
 

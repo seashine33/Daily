@@ -35,28 +35,11 @@ ld = (l**2+d**2)**0.5
 phi_ = np.arctan(d/l)   # 21.8°
 arrow_length = 5
 cs1 = 0.3                  # 调整衰减速率，越小危险区域区域越大
+alpha = 0.005
+beta = 0.006
+gamma = 0.025
 #############################################
-m1 = 1000
-lamta = 0.00001
-tao = 0.8
-aerfa1 = 0.01
-aerfa2 = 0.001
-kesai = 0.2
 
-m2 = 1000
-beita = 0.03
-beita1 = 0.01
-beita2 = 0.001
-
-gama = 0.01
-
-m3 = 1000
-
-Ai = 0.1
-y_l = -3.2
-kexi = 0.1
-delta = 0.5
-sigema = 0.5
 #############################################
 
 
@@ -135,9 +118,9 @@ def get_P_and_E(p1, p2, v1, v2, angle1, angle2, fai_v1, fai_v2, a1, a1_theta):
     Vy = v1*np.sin(angle1) - v2*np.sin(angle2)
     V_delta = ((Vx**2)+(Vy**2))**0.5
     theta_V_delta = np.arctan2(Vy, Vx)
-    E = P**cs1 * np.exp(0.002*v1 + 
-                        0.002*V_delta*abs(np.cos((theta_V_delta-theta)/2)) + 
-                        0.010*(a1)*abs(np.cos((theta-a1_theta)/2)))
+    E = P**cs1 * np.exp(alpha*v1 + 
+                        beta*V_delta*abs(np.cos((theta_V_delta-theta)/2)) + 
+                        gamma*abs(a1)*abs(np.cos((theta-a1_theta)/2)))
     return P, E
 
 # 场景A
@@ -173,7 +156,7 @@ def scene_A(fai_v1 = 0, fai_v2 = 0):
     queue_p1 = queue.Queue(2)
     queue_p2 = queue.Queue(2)
     
-    for step in range(0, 800):  # 仿真时间
+    for step in range(0, 700):  # 仿真时间
         # time.sleep(0.1)
         traci.simulationStep()          # 逐步仿真
         t = traci.simulation.getTime()  # 仿真时间
@@ -202,7 +185,7 @@ def scene_A(fai_v1 = 0, fai_v2 = 0):
                 fai_v2 = np.arctan2(p2[1] - old_p2[1], p2[0] - old_p2[0])
                 # print('fai_v2=', fai_v2)
 
-            if p1[0] > 2000:
+            if p1[0] > 600:
                 traci.vehicle.setSpeed('1', 10)     # 行驶600米后，1车减速
             
             v1 = traci.vehicle.getSpeed(all_vehicle_id[0])
@@ -241,7 +224,10 @@ def scene_A(fai_v1 = 0, fai_v2 = 0):
             pred_2[2][1] += (0.1 * random.uniform(-0.5, 0.5))
             x2_3s_list.append(pred_2[2][0])
 
-            a1_theta = 0
+            if a1>=0:
+                a1_theta = 0
+            else:
+                a1_theta = np.pi
 
             v1_1s = v1 + a1
             v1_2s = v1 + 2 * a1
@@ -275,55 +261,72 @@ def scene_A(fai_v1 = 0, fai_v2 = 0):
 
     assert len(time_list) == len(P_list)
 
-    fig = plt.figure(figsize=(10,4))
-    ax1 = fig.add_subplot(1, 2, 1)
+    fig = plt.figure(figsize=(10,8))
+    ax1 = fig.add_subplot(2, 2, 1)
     ax2 = ax1.twinx()
-    ax3 = fig.add_subplot(1, 2, 2)
+    ax3 = fig.add_subplot(2, 2, 2)
     ax4 = ax3.twinx()
+    ax5 = fig.add_subplot(2, 2, 3)
+    ax6 = ax5.twinx()
+    ax7 = fig.add_subplot(2, 2, 4)
+    ax8 = ax7.twinx()
 
-    ax1.plot(time_list, v1_list, '-', c='tab:red', label='v1')
-    ax1.plot(time_list, v2_list, '-', c='tab:blue', label='v2')
+    ax1.plot(time_list, v1_list, '-', c='tab:red', label='v$_{1}$')
+    ax1.plot(time_list, v2_list, '-', c='tab:blue', label='v$_{2}$')
     ax2.plot(time_list, np.array(x1_list)-np.array(x2_list), '--', c='tab:green', label='Δx')
     # ax2.plot(time_list, a1_list, '-', c='tab:orange', label='a1')
     # ax2.plot(time_list, a2_list, '-', c='tab:cyan', label='a2')
 
-    ax3.plot(time_list, P_list,  '-', c='tab:orange', label='P')
-    ax3.plot(time_list, E_list, '-', c='tab:cyan', label='E')
-    ax3.plot(time_list, E_3s_list, '--', c='tab:purple', label='E_3s', alpha=0.5)
+    ax3.plot(time_list, P_list,  '-', c='tab:blue', label='P')
+    ax3.plot(time_list, E_list, '-', c='tab:red', label='E')
+    ax3.plot(time_list, E_3s_list, '--', c='tab:purple', label='E$^{\'}$', alpha=0.5)
     ax4.plot(time_list, np.array(x1_list)-np.array(x2_list), '--', c='tab:green', label='Δx')
+
+    ax5.plot(time_list, (np.array(E_list)-np.array(P_list))/np.array(P_list), '--', c='tab:red', label='E-P', alpha=0.8)
+    ax6.plot(time_list, ttci_list, '-', c='tab:green', label='TTC$^{-1}$')
+
+    ax7.plot(time_list, 1/np.array(P_list), '--', c='tab:red', label='P', alpha=0.5)
+    ax7.plot(time_list, 1/np.array(E_list), '--', c='tab:red', label='E', alpha=0.5)
+    ax8.plot(time_list, ttci_list, '-', c='tab:green', label='TTC$^{-1}$')
 
 
     ax1.set_xlabel('t(s)')
     ax1.set_ylabel('v(m/s)')
-
-    ax2.set_ylabel('x(m)')
+    ax2.set_ylabel('Distance(m)')
 
     ax3.set_xlabel('t(s)')
-    ax3.set_ylabel('E')
+    ax3.set_ylabel('P & E')
+    ax4.set_ylabel('Distance(m)')
 
-    ax4.set_ylabel('x(m)')
+    ax5.set_xlabel('t(s)')
+    ax5.set_ylabel('E-P')
+    ax6.set_ylabel('TTC$^{-1}$')
 
-    # ax1.spines['left'].set_color(c='tab:blue')  # 注意ax1是left
-    # ax2.spines['right'].set_color(c='tab:green')
-    # ax3.spines['right'].set_color(c='tab:orange')
-    # ax4.spines['right'].set_color(c='tab:purple')
-
-
-    # ax2.tick_params(axis='y', color='tab:green', labelcolor='tab:green')
-    # ax3.tick_params(axis='y', color='tab:orange', labelcolor='tab:orange')
-    # ax4.tick_params(axis='y', color='tab:purple', labelcolor='tab:purple')
+    ax7.set_xlabel('t(s)')
+    ax7.set_ylabel('P')
+    ax8.set_ylabel('TTC$^{-1}$')
 
 
     handle1, label1 = ax1.get_legend_handles_labels()
     handle2, label2 = ax2.get_legend_handles_labels()
     handle3, label3 = ax3.get_legend_handles_labels()
     handle4, label4 = ax4.get_legend_handles_labels()
+    handle5, label5 = ax5.get_legend_handles_labels()
+    handle6, label6 = ax6.get_legend_handles_labels()
+    handle7, label7 = ax7.get_legend_handles_labels()
+    handle8, label8 = ax8.get_legend_handles_labels()
 
     ax1.legend(handles=handle1 + handle2,
               labels=label1 + label2, loc='best')
 
     ax4.legend(handles=handle3 + handle4,
                labels=label3 + label4, loc='center right')
+    
+    ax5.legend(handles=handle5 + handle6,
+              labels=label5 + label6, loc='best')
+
+    ax8.legend(handles=handle7 + handle8,
+               labels=label7 + label8, loc='best')
 
     plt.tight_layout()
     # plt.grid()  # 网格
@@ -361,9 +364,9 @@ def scene_B(fai = 0, fai_1 = 0):
     queue_ego = queue.Queue(2)
     queue_p1 = queue.Queue(2)
 
-    for step in range(0, 28):  # 仿真时间
+    for step in range(0, 280):  # 仿真时间
         traci.simulationStep()  # 一步一步（一帧一帧）进行仿真
-        time.sleep(0.1)
+        # time.sleep(0.1)
         t = traci.simulation.getTime()  # 获得仿真时间
         # print("simulation_time=", simulation_time)
         all_vehicle_id = traci.vehicle.getIDList()  # 获得所有车的id
@@ -1060,5 +1063,5 @@ def scene_D():
 
 
 if __name__ == "__main__":
-    scene_D()
+    scene_A()
 
