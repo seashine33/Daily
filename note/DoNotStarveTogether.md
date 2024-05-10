@@ -48,4 +48,20 @@
   - 开端口不是命令行开，是云服务器控制台的安全组里面开，协议类型是UDP。
 - 添加mod
   - 服务器目录mods文件夹下/dedicated_server_mods_setup.lua
-  - 
+  - C:\Users\69453\Documents\Klei\DoNotStarveTogether\485678640
+
+
+erverModSetup("1216718131")
+ServerModCollectionSetup("1216718131")
+
+erverModSetup("375850593")
+ServerModCollectionSetup("375850593")
+
+erverModSetup("462372013")
+ServerModCollectionSetup("462372013")
+
+erverModSetup("501385076")
+ServerModCollectionSetup("501385076")
+
+erverModSetup("831523966")
+ServerModCollectionSetup("831523966")

@@ -2,8 +2,11 @@
 文件大小  
 sudo du -sh *
 
-文件夹下文件数目  
+文件夹下文件数目（不包括目录）
 ls -l |grep "^-" | wc -l
+
+统计当前目录下文件的个数（包括子目录）
+ls -lR| grep "^-" | wc -l
 
 复制文件夹下前一千个文件  
 ls |head -n 1000 |xargs -i cp {} /temp

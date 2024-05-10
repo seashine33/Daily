@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 
@@ -7,7 +8,7 @@ l = 5
 d = 2
 ld = (l**2+d**2)**0.5
 phi_ = np.arctan(d/l)   # 21.8°
-arrow_length = 5
+arrow_length = 2.5    # 5
 alpha = 0.005
 beta = 0.006
 gamma = 0.025
@@ -87,12 +88,18 @@ def draw_center_car():
     fine = 500
     x = np.linspace(-l/2, l/2, fine)
     y = np.linspace(-d/2, d/2, fine)
-    plt.plot(x, np.ones(fine)*d/2, color = 'r')
-    plt.plot(x, np.ones(fine)*(-d/2), color = 'r')
-    plt.plot(np.ones(fine)*(l/2), y, color = 'r')
-    plt.plot(np.ones(fine)*(-l/2), y, color = 'r')
-    plt.plot(0,0,'o',color = 'r')
+    line_color = 'k'
+    plt.plot(x, np.ones(fine)*d/2, color = line_color)
+    plt.plot(x, np.ones(fine)*(-d/2), color = line_color)
+    plt.plot(np.ones(fine)*(l/2), y, color = line_color)
+    plt.plot(np.ones(fine)*(-l/2), y, color = line_color)
+    plt.plot(0,0,'o',color = line_color)
+    xx = np.array([-l/2, l/2])
+    y1 = np.array([-d/2, -d/2])
+    y2 = np.array([d/2, d/2])
+    # plt.fill_between(xx, y1, y2, where=(y2>y1), color='yellow', alpha=1)
     plt.annotate('', xy=(arrow_length,0),xytext=(0,0), arrowprops=dict(arrowstyle="->", color='r'))
+    # plt.annotate('', xy=(0,arrow_length),xytext=(0,0), arrowprops=dict(arrowstyle="->", color='r'))
     return
 
 # 作自车
@@ -145,11 +152,11 @@ def draw_danger_car_theta(theta, phi):
 
 # 作出自车在任一点(x,y)与车头方向phi下，对应的碰撞位置
 def demo2():
-    x = -7
-    y = 0
-    phi = 0     # np.pi/8
+    x = 8
+    y = 1
+    phi = np.pi/9     # np.pi/8
     draw_center_car()
-    draw_self_car(x, y, phi)
+    # draw_self_car(x, y, phi)
     draw_danger_car_xy(x, y, phi)
     plt.gca().set_aspect(1)
     plt.show()
@@ -266,22 +273,31 @@ def demo5_1():
     alpha = 0.005
     beta = 0.006
     gamma = 0.025
+    # # 静态因素
+    # phi_self =       [0,  0,  0,  0,     0,       0, np.pi/2, np.pi]              # 自车方向角，车头朝向
+    # # 动态因素
+    # v_center =       [0, 20,  0, 20,    20,      20,      20,    20]              # 速度越大，需要的跟车距离越大
+    # v_center_theta = [0,  0,  0,  0,     0,       0,       0,     0]
+    # v_self =         [0, 20, 20, 20,    20,      20,      20,    20]              # 自车速度
+    # v_self_theta =   [0,  0,  0,  0,     0,       0, np.pi/2, np.pi]
+    # a_center =       [0,  0,  0,  5,     5,       5,       0,     0]              # 相对加速度，只有正值
+    # a_center_theta = [0,  0,  0,  0, np.pi, np.pi/2,       0,     0]              # 相对加速度方向
+
     # 静态因素
-    phi_self =       [0,  0,  0,  0,     0,       0, np.pi/2, np.pi]              # 自车方向角，车头朝向
-
+    phi_self =       [ 0,  0,     0,       0]              # 自车方向角，车头朝向
     # 动态因素
-    v_center =       [0, 20,  0, 20,    20,      20,      20,    20]              # 速度越大，需要的跟车距离越大
-    v_center_theta = [0,  0,  0,  0,     0,       0,       0,     0]
-    v_self =         [0, 20, 20, 20,    20,      20,      20,    20]              # 自车速度
-    v_self_theta =   [0,  0,  0,  0,     0,       0, np.pi/2, np.pi]
-    a_center =       [0,  0,  0,  5,     5,       5,       0,     0]              # 相对加速度，只有正值
-    a_center_theta = [0,  0,  0,  0, np.pi, np.pi/2,       0,     0]              # 相对加速度方向
-
+    v_center =       [20, 20,    20,      20]              # 速度越大，需要的跟车距离越大
+    v_center_theta = [ 0,  0,     0, np.pi/4]
+    v_self =         [20, 20,    20,      20]              # 自车速度
+    v_self_theta =   [ 0,  0,     0,       0]
+    a_center =       [ 0,  5,    10,       0]              # 相对加速度，只有正值
+    a_center_theta = [ 0,  0, np.pi,       0]              # 相对加速度方向
+    
     for k in range(0, len(phi_self)):    # len(phi_self)
         for i in range(theta.shape[0]):
             for j in range(theta.shape[1]):
-                length_[i][j] = get_oo_length(theta[i][j], phi_self[k])
-        x = length_ * np.cos(theta)     # 各点对应临界碰撞坐标
+                length_[i][j] = get_oo_length(theta[i][j], phi_self[k]) # 临界碰撞距离
+        x = length_ * np.cos(theta)     # 临界碰撞坐标
         y = length_ * np.sin(theta)
         P = ((x**2 + y**2)**0.5/(X**2 + Y**2)**0.5)**cs1    # 碰撞概率：临界碰撞距离/当前两车距离
         Vx = v_center[k]*np.cos(v_center_theta[k]) - v_self[k]*np.cos(v_self_theta[k])
@@ -293,26 +309,37 @@ def demo5_1():
                        gamma*(a_center[k])*abs(np.cos((theta-a_center_theta[k])/2)))
         for i in range(len(Z)):
             for j in range(len(Z[i])):
-                if Z[i][j]>1.5:
-                    Z[i][j]=1.5
+                if Z[i][j]>1.2:
+                    Z[i][j]=1.2
 
-        ax = plt.subplot(4, 2, k+1)
-        line = [0.60, 0.70, 0.80, 0.90, 1.0, 1.5]
+        ax = plt.subplot(2, 2, k+1)
+        
+        line = [0.60, 0.70, 0.80, 0.90, 1.0, 1.2]
         # line = [0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.0, 1.5]
         # line = [0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.0, 1.5]
-        plt.contourf(X, Y, Z, line, cmap=plt.get_cmap('Blues'))
+        plt.contourf(X, Y, Z, line, cmap=plt.get_cmap('rainbow'), extend='both') # magma_r, Blues, rainbow
+        cbar = plt.colorbar(ax=ax, fraction=0.025)
+        cbar.set_ticks([0.6, 0.7, 0.8, 0.9, 1.0, 1.2])
+        cbar.set_ticklabels(['0.6', '0.7', '0.8', '0.9', '1.0', 'Collision'])
         c = plt.contour(X, Y, Z, line, colors='black')
         plt.clabel(c, inline=True, fontsize=10)
-        # draw_center_car()   # 自车车身
+
+        
         demo6(phi_self[k])     # 碰撞环
-        title = '(' + str(k+1) + ')' + "vA=" + str(v_center[k]) + ",vB=" + str(v_self[k])
-        title += ",φ="+ str(int(phi_self[k]/np.pi*180)) + "°,aA=" + str(a_center[k]) + ",θaA=" + str(int(a_center_theta[k]/np.pi*180)) + '°'
-        ax.set_title(title, family='monospace', fontsize=10)     # Times New Roman
+        draw_center_car()   # 自车车身
+        title = '(' + str(k+1) + ')' + "v$_{A}$=" + str(v_center[k]) + "m/s,θ$_{A}$="+ str(int(v_center_theta[k]/np.pi*180)) + "°,a$_{A}$="
+        if a_center_theta[k] == np.pi:
+            a_center[k] = -a_center[k]
+        title +=  str(a_center[k]) + "m/s$^{2}$"
+        # ax.set_title(title, family='monospace', fontsize=12, y=-0.25)     # Times New Roman
         ax.set_xlabel('X/m', fontsize=8, labelpad=0)
         ax.set_ylabel('Y/m', fontsize=8, labelpad=-10)
+        
         plt.xlim(-20, 20)
         plt.ylim(-10, 10)
         plt.gca().set_aspect(1)
+
+        
         # plt.grid()  # 网格
     # plt.tight_layout()
     plt.show()
@@ -320,15 +347,18 @@ def demo5_1():
 
 # 碰撞环
 def demo6(phi_self = np.pi*2/3):
-    theta = np.linspace(0, 2*np.pi, 1000)
+    theta = np.linspace(0, 2*np.pi, 500)
     x_col = []
     y_col = []
+
     for t in theta:
         l_col = get_oo_length(t, phi_self)
         x_col.append(l_col*np.cos(t))
         y_col.append(l_col*np.sin(t))
-    plt.plot(x_col, y_col, color = 'pink')
-    plt.annotate('', xy=(arrow_length*np.cos(phi_self),arrow_length*np.sin(phi_self)),xytext=(0,0), arrowprops=dict(arrowstyle="->", color='pink'))
+
+    plt.fill(x_col, y_col, color = 'red')
+    plt.plot(x_col, y_col, color = 'k')
+    # plt.annotate('', xy=(arrow_length*np.cos(phi_self),arrow_length*np.sin(phi_self)),xytext=(0,0), arrowprops=dict(arrowstyle="->", color='pink'))
     # plt.show()
     return
 
@@ -402,7 +432,7 @@ def demo8():
     # theta = 10*np.pi/180      # 1
     # phi_self = [0, theta, 2*theta, theta + phi_, 2*(theta + phi_),np.pi/2, np.pi + 2*theta - 2*phi_, np.pi-theta, np.pi]
     # theta = 30*np.pi/180      # 2
-    # phi_self = [0, theta - phi_, 2*(theta-phi_), 40*np.pi/180, 2*theta, 75*np.pi/180, np.pi/2, np.pi-theta, np.pi]
+    # phi_self = [0, theta - phi_, 2*(theta-phi_), 2*theta, np.pi/2, np.pi]
     # theta = 50*np.pi/180      # 3
     # phi_self = [0, theta - phi_, 2*(theta-phi_), np.pi/2, 2*theta, 150*np.pi/180]
     theta = 80*np.pi/180      # 4
@@ -420,7 +450,7 @@ def demo8():
         plt.xlim(-3, 4)         # 4
         plt.ylim(-2, 6.5)
         title = '(' + str(i+1) + ')' + 'θ=' + format(theta/np.pi*180, '.1f') + '°,φ=' + format(phi_self[i]/np.pi*180, '.1f') + '°'
-        ax.set_title(title, family='monospace', fontsize=12)
+        ax.set_title(title, family='monospace', fontsize=12, y=-0.25)
         ax.set_xlabel('X/m', fontsize=8, labelpad=0)
         ax.set_ylabel('Y/m', fontsize=8, labelpad=-10)
         plt.gca().set_aspect(1)
@@ -438,6 +468,8 @@ def demo9():
     cs1 = 0.28                  # 调整衰减速率，越小危险区域区域越大
     phi_self = [0, np.pi/4, np.pi/2, np.pi*2/3]
     lamb =     [1.2,   1.0,     0.8,       0.5]
+    # phi_self = [0, np.pi/4]
+    # lamb =     [1.2,   1.0]
     for k in range(0, len(phi_self)):    # len(phi_self)
         for i in range(theta.shape[0]):
             for j in range(theta.shape[1]):
@@ -464,7 +496,52 @@ def demo9():
     plt.show()
     return
 
+
+def demo9_1():
+    x = np.linspace(-10, 10, 400)
+    y = np.linspace(-10, 10, 200)
+    X, Y = np.meshgrid(x, y)  # 获得网格坐标矩阵, [200, 400]
+    theta = np.arctan2(Y, X)
+    length_ = np.zeros((theta.shape[0], theta.shape[1]))
+    cs1 = 0.28                  # 调整衰减速率，越小危险区域区域越大
+    # phi_self = [0, np.pi/4, np.pi/2, np.pi*2/3]
+    # lamb =     [1.2,   1.0,     0.8,       0.5]
+    phi_self = [0, np.pi/4]
+    lamb =     [0.6,   1.2]
+    for k in range(0, len(phi_self)):    # len(phi_self)
+        for i in range(theta.shape[0]):
+            for j in range(theta.shape[1]):
+                length_[i][j] = get_oo_length(theta[i][j], phi_self[k])
+        x = length_ * np.cos(theta)     # 各点对应临界碰撞坐标
+        y = length_ * np.sin(theta)
+        Z = ((x**2 + y**2)**0.5/(X**2 + Y**2)**0.5)**lamb[k]    # 碰撞概率：临界碰撞距离/当前两车距离
+        for i in range(len(Z)):
+            for j in range(len(Z[i])):
+                if Z[i][j]>1.2:
+                    Z[i][j]=1.2
+        ax = plt.subplot(1, 2, k+1)
+        line = [0.20, 0.40, 0.60, 0.80, 1.0]
+        plt.contourf(X, Y, Z, line, cmap=plt.get_cmap('rainbow'), extend='both') # magma_r, Blues, rainbow     
+
+        cbar = plt.colorbar(ax=ax, fraction=0.05)
+        cbar.set_ticks([0.20, 0.40, 0.60, 0.80, 1.0])
+        cbar.set_ticklabels(['0.2', '0.4', '0.6', '0.8', '1.0'])
+
+        c = plt.contour(X, Y, Z, line, colors='black')
+        plt.clabel(c, inline=True, fontsize=10)
+
+        draw_center_car()   # 自车车身
+        # demo6(phi_self[k])     # 碰撞环
+
+        title = "(" + str(k+1) + ")" + "φ="+ str(int(phi_self[k]/np.pi*180)) + "°,λ=" + format(lamb[k], '.1f')
+        ax.set_title(title, family='monospace', fontsize=10, y=-0.20)     # Times New Roman
+        ax.set_xlabel('X/m', fontsize=8, labelpad=0)
+        ax.set_ylabel('Y/m', fontsize=8, labelpad=-10)
+        plt.gca().set_aspect(1)
+    plt.show()
+    return
+
 if __name__ == "__main__":
-    demo5()
+    demo9_1()
     # P = (E[0]/E[1])
     # print(P)
