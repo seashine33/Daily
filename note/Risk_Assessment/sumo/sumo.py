@@ -309,7 +309,7 @@ def scene_A(fai_v1 = 0, fai_v2 = 0):
     loss = sum(nnn/np.array(E_list[20:]))/len(nnn)
     print("loss", loss)
 
-    fig = plt.figure(figsize=(10,8))
+    fig = plt.figure(figsize=(9,7))
     ax1 = fig.add_subplot(2, 2, 1)
     ax2 = ax1.twinx()
     ax3 = fig.add_subplot(2, 2, 2)
@@ -323,20 +323,28 @@ def scene_A(fai_v1 = 0, fai_v2 = 0):
     # ax11 = fig.add_subplot(3, 2, 6)
     # ax12 = ax11.twinx()
 
-    ax1.plot(time_list, v1_list, '-', c='tab:red', label='v$_{1}$')
-    ax1.plot(time_list, v2_list, '--', c='tab:blue', label='v$_{2}$')
-    ax2.plot(time_list, np.array(x1_list)-np.array(x2_list), '-.', c='tab:green', label='Δx')
-    # ax2.plot(time_list, a1_list, '-', c='tab:orange', label='a1')
-    # ax2.plot(time_list, a2_list, '-', c='tab:cyan', label='a2')
+    # ax1.plot(time_list, v1_list, '-', c='tab:red', label='v$_{1}$')
+    # ax1.plot(time_list, v2_list, '--', c='tab:blue', label='v$_{2}$')
+    # ax2.plot(time_list, np.array(x1_list)-np.array(x2_list), '-.', c='tab:green', label='Δx')
+    ax1.plot(time_list, v1_list, '-', c='black', label='v$_{1}$')
+    ax1.plot(time_list, v2_list, '--', c='black', label='v$_{2}$')
+    ax2.plot(time_list, np.array(x1_list)-np.array(x2_list), '-.', c='black', label='Δx')
 
-    ax3.plot(time_list, P_list,  '-', c='tab:blue', label='P$_{0}$')
-    ax3.plot(time_list, E_list, '--', c='tab:green', label='CRI$_{0}$')
-    ax3.plot(time_list, E_2s_list, '-.', c='tab:red', label='CRI$_{2}$', alpha=0.6)    # 
-    ax4.plot(time_list, np.array(x1_list)-np.array(x2_list), ':', c='tab:purple', label='Δx')   # linestyle=(0, (3, 1, 1, 1, 1, 1))
+
+    # ax3.plot(time_list, P_list,  '-', c='tab:blue', label='P$_{0}$')
+    # ax3.plot(time_list, E_list, '--', c='tab:green', label='CRI$_{0}$')
+    # ax3.plot(time_list, E_2s_list, '-.', c='tab:red', label='CRI$_{2}$', alpha=0.6)    # 
+    # ax4.plot(time_list, np.array(x1_list)-np.array(x2_list), ':', c='tab:purple', label='Δx')   # linestyle=(0, (3, 1, 1, 1, 1, 1))
+    ax3.plot(time_list, P_list,  '-', c='black', label='P$_{0}$')
+    ax3.plot(time_list, E_list, '--', c='black', label='CRI$_{0}$')
+    ax3.plot(time_list, E_2s_list, '-.', c='black', label='CRI$_{2}$', alpha=0.6)    # 
+    ax4.plot(time_list, np.array(x1_list)-np.array(x2_list), ':', c='black', label='Δx')   # linestyle=(0, (3, 1, 1, 1, 1, 1))
 
     
-    ax5.plot(time_list, E_2s_list, '-', c='tab:blue', label='CRI$_{2}$')
-    ax6.plot(time_list, ttci_list, '--', c='tab:red', label='TTC$^{-1}$')
+    # ax5.plot(time_list, E_2s_list, '-', c='tab:blue', label='CRI$_{2}$')
+    # ax6.plot(time_list, ttci_list, '--', c='tab:red', label='TTC$^{-1}$')
+    ax5.plot(time_list, E_2s_list, '-', c='black', label='CRI$_{2}$')
+    ax6.plot(time_list, ttci_list, '--', c='black', label='TTC$^{-1}$')
 
     # ax5.plot(time_list, np.array(E_list)/np.array(P_list)/(np.array(x1_list)-np.array(x2_list)), '--', c='tab:red', label='E/P/P', alpha=0.8)    # (速度+速度差+加速度)除等效距离
     # ax5.plot(time_list, np.array(E_list)/np.array(P_list)/(1/np.array(P_list)), '--', c='tab:red', label='E/P/P', alpha=0.8)    # (速度+速度差+加速度)除等效距离
@@ -1010,7 +1018,7 @@ def scene_B_1(fai_ego = 0, fai_1 = 0):
     nnn = abs(np.array(Fp_list[:-20]) - np.array(F_list[20:]))
     loss = sum(nnn/np.array(F_list[20:]))/len(nnn)
     print("loss", loss)
-    fig = plt.figure(figsize=(10, 8))
+    fig = plt.figure(figsize=(9, 7))
     ax1 = fig.add_subplot(2, 2, 1)
     ax2 = ax1.twinx()
     ax3 = fig.add_subplot(2, 2, 2)
@@ -1025,27 +1033,27 @@ def scene_B_1(fai_ego = 0, fai_1 = 0):
     # ax3 = ax1.twinx()
     # ax4 = ax1.twinx()
 
-    ax1.plot(time_list, v_ego_list, '-', c='tab:red', label='v$_{1}$')
-    ax1.plot(time_list, v1_list, '--', c='tab:blue', label='v$_{2}$')
-    ax2.plot(time_list, d_list, '-.', c='tab:grey', label='D')
-    # ax2.plot(time_list, dx_list, '-.', c='tab:cyan', label='dx')
-    # ax2.plot(time_list, dy_list, '-.', c='tab:purple', label='dy')
-    # ax2.plot(time_list, F_list, c='tab:orange', label='E')
+    # ax1.plot(time_list, v_ego_list, '-', c='tab:red', label='v$_{1}$')
+    # ax1.plot(time_list, v1_list, '--', c='tab:blue', label='v$_{2}$')
+    # ax2.plot(time_list, d_list, '-.', c='tab:grey', label='D')
+    ax1.plot(time_list, v_ego_list, '-', c='black', label='v$_{1}$')
+    ax1.plot(time_list, v1_list, '--', c='black', label='v$_{2}$')
+    ax2.plot(time_list, d_list, '-.', c='black', label='D')
 
     
-    ax3.plot(time_list, F_list, '-', c='tab:orange', label='CRI$_{0}$')
-    ax3.plot(time_list, Fv1_list, '--', c='tab:cyan', label='P$_{2}$')
-    ax3.plot(time_list, Fp_list, '-.', c='tab:purple', label='CRI$_{2}$')
-    ax4.plot(time_list, dx_list, ':', c='tab:grey', label='Δx')
-    ax4.plot(time_list, dy_list, linestyle=(0, (5, 1 )), c='tab:green', label='Δy')
-    # ax3.plot(time_list, Fv2_list, c='tab:orange', label='DSI_v2')
-    # ax3.plot(time_list, Fl_list, c='tab:grey', label='DSI_l')
+    # ax3.plot(time_list, F_list, '-', c='tab:orange', label='CRI$_{0}$')
+    # ax3.plot(time_list, Fv1_list, '--', c='tab:cyan', label='P$_{2}$')
+    # ax3.plot(time_list, Fp_list, '-.', c='tab:purple', label='CRI$_{2}$')
+    # ax4.plot(time_list, dx_list, ':', c='tab:grey', label='Δx')
+    # ax4.plot(time_list, dy_list, linestyle=(0, (5, 1 )), c='tab:green', label='Δy')
+    ax3.plot(time_list, F_list, '-', c='black', label='CRI$_{0}$')
+    # ax3.plot(time_list, Fv1_list, '--', c='black', label='P$_{2}$')
+    ax3.plot(time_list, Fp_list, '-.', c='black', label='CRI$_{2}$')
+    ax4.plot(time_list, dx_list, ':', c='black', label='Δx')
+    ax4.plot(time_list, dy_list, linestyle=(0, (5, 1 )), c='black', label='Δy')
 
-    # ax3.plot(time_list, ttci_list, c='tab:orange', label='TTCI')
-    # ax4.plot(time_list, SM_list, c='tab:purple', label='SM')
-
-    ax5.plot(time_list, Fp_list, '-', c='tab:red', label='CRI$_{2}$')
-    ax6.plot(time_list, ttci_list, '--', c='tab:blue', label='TTC$^{-1}$')
+    ax5.plot(time_list, Fp_list, '-', c='black', label='CRI$_{2}$')
+    ax6.plot(time_list, ttci_list, '--', c='black', label='TTC$^{-1}$')
 
     # 获取对应折线图颜色给到spine ylabel yticks yticklabels
     axs = [ax1, ax2, ax3, ax4]
@@ -1690,5 +1698,5 @@ def scene_D():
 
 
 if __name__ == "__main__":
-    scene_D()
+    scene_C()
 

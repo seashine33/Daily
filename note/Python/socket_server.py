@@ -8,8 +8,9 @@
 
 import threading
 import socket
+from colorama import Fore, Back, Style, init
 
-encoding = 'utf-8'
+encoding = 'GB2312'  # GB2312, utf-8, gbk
 BUFSIZE = 1024
 
 def demo():
@@ -25,7 +26,7 @@ def demo():
         c.send('Hello'.encode())
         c.close()      
 
-
+# 建立TCP连接后，用于接受来自客户端的数据
 class Reader(threading.Thread):
     def __init__(self, client):
         threading.Thread.__init__(self)
@@ -36,11 +37,12 @@ class Reader(threading.Thread):
             data = self.client.recv(BUFSIZE)
             if(data):
                 string = bytes.decode(data, encoding)
-                print(string)
+                print(Fore.RED + string[:-2])
             else:
                 break
-        print("close:", self.client.getpeername())
-        
+        print("close:", self.client.getpeername())  # 将客户端传输而来的数据输出为红色
+
+# 建立TCP连接后，用于传输数据给客户端
 class Sender(threading.Thread):
     def __init__(self, client):
         threading.Thread.__init__(self)
@@ -48,18 +50,19 @@ class Sender(threading.Thread):
         
     def run(self):
         while True:
-            send_string = input("传输给客户端的内容：\n")
+            send_string = input() + '\r\n'
             if send_string == '+++':
                 self.client.close()
-            self.client.send(send_string.encode())
+            self.client.send(send_string.encode(encoding))
 
-class Listener(threading.Thread):
+# 用于与客户端建立TCP连接
+class Linker(threading.Thread):
     def __init__(self, port):
         threading.Thread.__init__(self)
         self.port = port
         self.sock = socket.socket()
         self.sock.bind(('0.0.0.0', self.port))
-        self.sock.listen(5)     # 开始 TCP 监听。backlog 指定在拒绝连接之前，操作系统可以挂起的最大连接数量。该值至少为 1，大部分应用程序设为 5 就可以了。
+        self.sock.listen(5)     # 开始 TCP 监听。 backlog 指定在拒绝连接之前，操作系统可以挂起的最大连接数量。该值至少为 1，大部分应用程序设为 5 就可以了。
 
     def run(self):
         print("listener started")
@@ -69,5 +72,6 @@ class Listener(threading.Thread):
             Sender(client).start()
 
 if __name__ == '__main__':
-    lst = Listener(8088)   # create a listen thread
+    init(autoreset=True)    # 用于配置输出颜色。
+    lst = Linker(8088)   # create a listen thread
     lst.start() # then start

@@ -152,9 +152,9 @@ def draw_danger_car_theta(theta, phi):
 
 # 作出自车在任一点(x,y)与车头方向phi下，对应的碰撞位置
 def demo2():
-    x = 8
+    x = 1.71
     y = 1
-    phi = np.pi/9     # np.pi/8
+    phi = np.pi/180*75     # np.pi/8
     draw_center_car()
     # draw_self_car(x, y, phi)
     draw_danger_car_xy(x, y, phi)
@@ -317,7 +317,7 @@ def demo5_1():
         line = [0.60, 0.70, 0.80, 0.90, 1.0, 1.2]
         # line = [0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.0, 1.5]
         # line = [0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.0, 1.5]
-        plt.contourf(X, Y, Z, line, cmap=plt.get_cmap('rainbow'), extend='both') # magma_r, Blues, rainbow
+        plt.contourf(X, Y, Z, line, cmap=plt.get_cmap('Blues'), extend='both') # magma_r, Blues, rainbow
         cbar = plt.colorbar(ax=ax, fraction=0.025)
         cbar.set_ticks([0.6, 0.7, 0.8, 0.9, 1.0, 1.2])
         cbar.set_ticklabels(['0.6', '0.7', '0.8', '0.9', '1.0', 'Collision'])
@@ -356,7 +356,7 @@ def demo6(phi_self = np.pi*2/3):
         x_col.append(l_col*np.cos(t))
         y_col.append(l_col*np.sin(t))
 
-    plt.fill(x_col, y_col, color = 'red')
+    plt.fill(x_col, y_col, color = 'darkblue')   # red, midnightblue, navy, darkblue
     plt.plot(x_col, y_col, color = 'k')
     # plt.annotate('', xy=(arrow_length*np.cos(phi_self),arrow_length*np.sin(phi_self)),xytext=(0,0), arrowprops=dict(arrowstyle="->", color='pink'))
     # plt.show()
@@ -496,14 +496,14 @@ def demo9():
     plt.show()
     return
 
-
+# 碰撞概率P
 def demo9_1():
     x = np.linspace(-10, 10, 400)
     y = np.linspace(-10, 10, 200)
     X, Y = np.meshgrid(x, y)  # 获得网格坐标矩阵, [200, 400]
     theta = np.arctan2(Y, X)
     length_ = np.zeros((theta.shape[0], theta.shape[1]))
-    cs1 = 0.28                  # 调整衰减速率，越小危险区域区域越大
+    cs1 = 0.08                  # 0.28, 调整衰减速率，越小危险区域区域越大
     # phi_self = [0, np.pi/4, np.pi/2, np.pi*2/3]
     # lamb =     [1.2,   1.0,     0.8,       0.5]
     phi_self = [0, np.pi/4]
@@ -521,11 +521,14 @@ def demo9_1():
                     Z[i][j]=1.2
         ax = plt.subplot(1, 2, k+1)
         line = [0.20, 0.40, 0.60, 0.80, 1.0]
-        plt.contourf(X, Y, Z, line, cmap=plt.get_cmap('rainbow'), extend='both') # magma_r, Blues, rainbow     
+        # line = [0.60, 0.70, 0.80, 0.90, 1.0]
+        plt.contourf(X, Y, Z, line, cmap=plt.get_cmap('Blues'), extend='both') # magma_r, Blues, rainbow, Greys
 
         cbar = plt.colorbar(ax=ax, fraction=0.05)
         cbar.set_ticks([0.20, 0.40, 0.60, 0.80, 1.0])
         cbar.set_ticklabels(['0.2', '0.4', '0.6', '0.8', '1.0'])
+        # cbar.set_ticks([0.60, 0.70, 0.80, 0.90, 1.0])
+        # cbar.set_ticklabels(['0.6', '0.7', '0.8', '0.9', '1.0'])
 
         c = plt.contour(X, Y, Z, line, colors='black')
         plt.clabel(c, inline=True, fontsize=10)
@@ -542,6 +545,6 @@ def demo9_1():
     return
 
 if __name__ == "__main__":
-    demo9_1()
+    demo5_1()
     # P = (E[0]/E[1])
     # print(P)
