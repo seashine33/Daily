@@ -268,7 +268,7 @@ def demo5_1():
     X, Y = np.meshgrid(x, y)  # 获得网格坐标矩阵, [200, 400]
     theta = np.arctan2(Y, X)
     length_ = np.zeros((theta.shape[0], theta.shape[1]))
-    cs1 = 0.28                  # 调整衰减速率，越小危险区域区域越大
+    cs1 = 0.5                  # 0.28, 调整衰减速率，越小危险区域区域越大
 
     alpha = 0.005
     beta = 0.006
@@ -314,18 +314,21 @@ def demo5_1():
 
         ax = plt.subplot(2, 2, k+1)
         
-        line = [0.60, 0.70, 0.80, 0.90, 1.0, 1.2]
-        # line = [0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.0, 1.5]
+        # line = [0.60, 0.70, 0.80, 0.90, 1.0, 1.2]
+        line2 = [0.60, 0.70, 0.80, 0.90, 1.0]
+        line = np.arange(0.60,1.0,0.005)
         # line = [0.00, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.0, 1.5]
         plt.contourf(X, Y, Z, line, cmap=plt.get_cmap('Blues'), extend='both') # magma_r, Blues, rainbow
         cbar = plt.colorbar(ax=ax, fraction=0.025)
-        cbar.set_ticks([0.6, 0.7, 0.8, 0.9, 1.0, 1.2])
-        cbar.set_ticklabels(['0.6', '0.7', '0.8', '0.9', '1.0', 'Collision'])
-        c = plt.contour(X, Y, Z, line, colors='black')
+        # cbar.set_ticks([0.6, 0.7, 0.8, 0.9, 1.0, 1.2])
+        cbar.set_ticks([0.6, 0.7, 0.8, 0.9, 1.0])
+        # cbar.set_ticklabels(['0.6', '0.7', '0.8', '0.9', '1.0', 'Collision'])
+        cbar.set_ticklabels(['0.6', '0.7', '0.8', '0.9', '1.0'])
+        c = plt.contour(X, Y, Z, line2, colors='black')
         plt.clabel(c, inline=True, fontsize=10)
 
         
-        demo6(phi_self[k])     # 碰撞环
+        # demo6(phi_self[k])     # 碰撞环
         draw_center_car()   # 自车车身
         title = '(' + str(k+1) + ')' + "v$_{A}$=" + str(v_center[k]) + "m/s,θ$_{A}$="+ str(int(v_center_theta[k]/np.pi*180)) + "°,a$_{A}$="
         if a_center_theta[k] == np.pi:

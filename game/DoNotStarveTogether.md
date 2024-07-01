@@ -48,20 +48,45 @@
   - 开端口不是命令行开，是云服务器控制台的安全组里面开，协议类型是UDP。
 - 添加mod
   - 服务器目录mods文件夹下/dedicated_server_mods_setup.lua
+- 本地存档
   - C:\Users\69453\Documents\Klei\DoNotStarveTogether\485678640
+- 本地mod
+  - E:\SteamLibrary\steamapps\common\Don't Starve Together\mods
 
 
-erverModSetup("1216718131")
+
+--防卡两招
+ServerModSetup("1216718131")
 ServerModCollectionSetup("1216718131")
 
-erverModSetup("375850593")
+--Extra Equip Slots
+ServerModSetup("375850593")
 ServerModCollectionSetup("375850593")
 
-erverModSetup("462372013")
+--Always fresh
+ServerModSetup("462372013")
 ServerModCollectionSetup("462372013")
 
-erverModSetup("501385076")
+--快速采集
+ServerModSetup("501385076")
 ServerModCollectionSetup("501385076")
 
-erverModSetup("831523966")
+--999堆叠
+ServerModSetup("831523966")
 ServerModCollectionSetup("831523966")
+
+--Global Positions
+ServerModSetup("378160973")
+ServerModCollectionSetup("378160973")
+
+--复活按钮和传送按钮
+ServerModSetup("2753774601")
+ServerModCollectionSetup("2753774601")
+
+--简易血条DST
+ServerModSetup("1207269058")
+ServerModCollectionSetup("1207269058")
+
+--Fast Travel (GUI)
+ServerModSetup("1530801499")
+ServerModCollectionSetup("1530801499")
