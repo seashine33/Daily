@@ -1,2 +1,2 @@
 # Daily
-It is my first repository, yeah, a demo.
+- It is my first repository, yeah, a demo.
