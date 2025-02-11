@@ -80,8 +80,60 @@ int test_2024_12_26_3(){
     return 0;
 }
 
+/// @brief 隐式转换
+/// @return 
+int test_2025_2_11_1(){
+    int8_t a = -127;
+    uint8_t b = 255;
+    uint8_t c = a + b;
+    int8_t d = a + b;
+    std::cout << int(c) << std::endl;   // 128
+    std::cout << int(d) << std::endl;   //-128
+    return 0;
+}
+
+/// @brief 引用与指针
+/// @return 
+void test_2025_2_11_2(int &a){
+    a = 2;
+}
+
+void test_2025_2_11_3(int *a){
+    *a = 3;
+}
+
+int test_2025_2_11_4(void){
+    int a = 1;
+    test_2025_2_11_2(a);
+    std::cout << a << std::endl;    //2
+    test_2025_2_11_3(&a);
+    std::cout << a << std::endl;   // 3
+    return 0;
+}
+
+/// @brief 强制类型转换 static_cast
+/// @return 
+int test_2025_2_11_5(void){
+    int a = 10;
+    double b = static_cast<double>(a) / 1.1;
+    double c = (double)a/1.1;
+    std::cout << b << std::endl;
+    std::cout << c << std::endl;
+    return 0;
+}
+
+/// @brief 强制类型转换 const_cast
+/// @return 
+int test_2025_2_11_6(void){
+    const int a = 10;
+    double b = const_cast<int&>(a) / 1.1;   //修改了常量属性
+    b = 1;
+    std::cout << b << std::endl;
+    return 0;
+}
+
 /// @brief 主函数
 /// @return 
 int main(){
-    return test_2024_12_26_3();
+    return test_2025_2_11_6();
 }
