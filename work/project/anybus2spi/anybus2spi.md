@@ -64,12 +64,14 @@
 * 测试周期时间
 
 ## 25/1/14
+
 * 从11号晚开始跑，到14号晚运行正常
 * stop codesys 后 start，板子正常复位
 * 开始看anybus2spi代码，捋出状态机，看是否有逻辑漏洞
 * 反复上电
 
 ## 25/1/17
+
 * ST版代码
   * 代码修改
     * [x] 通过配置，区分产品线
@@ -100,12 +102,15 @@
     * [ ] 确保总线模块发送给udp端的数据包格式正确。
 
 ## 25/1/21
+
 * 申请了四台工控机，十五根网线，接线
 * 环境搭建
 * 尝试跑一台
 
-## 25/1/21
-TODO: reset err count
+## 25/1/22
+
+* TODO
+  * reset err count
 * 测试说明
   * 共十台工控机，五台作为PLC，五台作为UDP，两两一组对传数据，中间使用总线版作为数据交换器
   * PLC的codesys文件夹下，PLC_test_25_1里有五个文件夹，对应五台PLC工控机，UDP_test_25_1下对应五台UDP工控机，每台工控机对应一个可以直接在线登录的文件
@@ -127,14 +132,45 @@ TODO: reset err count
 * AT-03
   * PLC105: 192.168.10.34(FFCM7-6DVQU-9GJ2G-DKA5X-6KCVLCN2066865)
   * UDP105: 192.168.10.35(5J2MB-HW3LT-34RTU-M5LKU-R7AV7CN2066867)
-
+* AT-06
+  * PLC106: 192.168.10.38
+  * UDP106: 192.168.10.37
 ## 25/2/10
+
 * 第一次读取测试结果，全部正常
 
-## 25/2/11
-### 阅读AT的UDP代码
-* 首先 AT32F407RCT7 芯片支持以太网
-* MII: 媒体独立接口, 17根信号线, 25MHz
-* RMII: 简化媒体独立接口, 9根信号线, 参考时钟50MHz
-* VLAN: 虚拟局域网
-* 
+# AT32-SPI2UDP代码
+
+* AT32F407RCT7规格书
+  * 首先 AT32F407RCT7 芯片支持以太网
+  * MII: 媒体独立接口, 17根信号线, 25MHz
+  * RMII: 简化媒体独立接口, 9根信号线, 参考时钟50MHz
+  * 支持VLAN: 虚拟局域网
+  * 引脚图![引脚图](image.png)
+  * RMII接口时序图![RMII接口时序图](image-1.png)
+  * MDC 和 MDIO 两引脚在时序图中未使用: **mido协议**即SMI协议, SMI包含两根信号线，一个MDC时钟线，一个MDIO双向传输的数据线，用于片选，最多管理32个PHY。
+* [PHY芯片](https://blog.csdn.net/qq_40715266/article/details/124095801):
+  * 具体在AT板中，使用的PHY芯片是 DM9162INP
+  * 物理层芯片称为PHY、数据链路层芯片称为MAC，RJ45网口。![alt text](image-2.png)
+* 程序流程
+  * 初始化mac: wk_emac_init(), 其中初始化了phy: wk_emac_phy_init()
+  * 复位phy: wk_emac_reset_phy()
+  * 初始化以太网硬件: low_level_init()
+    * 设置mac地址: lwip_set_mac_address()
+    * 配置用于mac的DMA总线及其中断
+  * 等待网线连接: wk_emac_link_update()
+  * 配置udp句柄: LeetxUDP_LinkDriverFunction()
+    * MAC地址
+    * 读UDP函数
+    * 发UDP函数
+    * 更新连接状态函数
+  * 初始化UDP: LeetxUDP_Init()
+
+# codesys测试代码
+* ![刹车电压](image-3.png)
+* SDO监控
+  * checkindex: 
+  * UDP2SPI1: udp_output[0]
+  * UDP2SPI2: udp_output[99]
+  * SPI2UDP1: spi_output[0]
+  * SPI2UDP2: spi_output[99]
