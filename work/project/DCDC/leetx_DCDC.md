@@ -83,3 +83,8 @@
   * 68.7: 2545
   * 69.9: 2503
 * 代码版本: v0.4.1, 压摆率设置为3000V/s，启动时间约20ms. ![alt text](image-6.png)
+
+* KP=50, KI=0.037![alt text](image-10.png)
+* KP=150, KI=0.2![alt text](image-7.png)
+* KP=150, KI=0.15![alt text](image-8.png)
+* KP=180, KI=0.1![alt text](image-9.png)
