@@ -35,6 +35,7 @@ ld = (l**2+d**2)**0.5
 phi_ = np.arctan(d/l)   # 21.8°
 arrow_length = 5
 cs1 = 0.3                  # 调整衰减速率，越小危险区域区域越大
+file_base = "E:\\Code\\github\\Daily\\task\\done\\Risk_Assessment\\sumo"
 
 # alpha = 0.005   # 他车速度, 0.003, 0.008
 # beta = 0.006    # 速度差, 0.016, 0.016
@@ -152,7 +153,7 @@ def scene_A(fai_v1 = 0, fai_v2 = 0):
         sumoBinary = checkBinary('sumo')
     else:
         sumoBinary = checkBinary('sumo-gui')
-    sumocfgfile = "E:\\Code\\github\\Daily\\note\\Risk_Assessment\\sumo\\scene_A\\2_1.sumocfg"  # sumocfg文件的位置
+    sumocfgfile = file_base + "\\scene_A\\2_1.sumocfg"  # sumocfg文件的位置
     traci.start([sumoBinary, "-c", sumocfgfile])  # 打开sumocfg文件
 
     time_list=[]
@@ -361,15 +362,15 @@ def scene_A(fai_v1 = 0, fai_v2 = 0):
     
     fontsize = 12
     labelpad_y = 0
-    ax1.set_xlabel('t(s)', fontsize=fontsize, labelpad=0)
-    ax1.set_ylabel('v(m/s)', fontsize=fontsize, labelpad=labelpad_y)
-    ax2.set_ylabel('Δx(m)', fontsize=fontsize, labelpad=labelpad_y)
+    ax1.set_xlabel('t/s', fontsize=fontsize, labelpad=0)
+    ax1.set_ylabel('v/(m/s)', fontsize=fontsize, labelpad=labelpad_y)
+    ax2.set_ylabel('Δx/m', fontsize=fontsize, labelpad=labelpad_y)
 
-    ax3.set_xlabel('t(s)', fontsize=fontsize, labelpad=0)
+    ax3.set_xlabel('t/s', fontsize=fontsize, labelpad=0)
     ax3.set_ylabel('P$_{t}$ and CRI$_{t}$', fontsize=fontsize, labelpad=labelpad_y)
-    ax4.set_ylabel('Δx(m)', fontsize=fontsize, labelpad=labelpad_y)
+    ax4.set_ylabel('Δx/m', fontsize=fontsize, labelpad=labelpad_y)
 
-    ax5.set_xlabel('t(s)', fontsize=fontsize, labelpad=0)
+    ax5.set_xlabel('t/s', fontsize=fontsize, labelpad=0)
     ax5.set_ylabel('CRI$_{2}$', fontsize=fontsize, labelpad=labelpad_y)
     ax6.set_ylabel('TTC$^{-1}$', fontsize=fontsize, labelpad=labelpad_y)
 
@@ -412,7 +413,7 @@ def scene_A_1(fai_v1 = 0, fai_v2 = 0):
         sumoBinary = checkBinary('sumo')
     else:
         sumoBinary = checkBinary('sumo-gui')
-    sumocfgfile = "E:\\Code\\github\\Daily\\note\\Risk_Assessment\\sumo\\scene_A\\2_1.sumocfg"  # sumocfg文件的位置
+    sumocfgfile = file_base + "\\scene_A\\2_1.sumocfg"  # sumocfg文件的位置
     traci.start([sumoBinary, "-c", sumocfgfile])  # 打开sumocfg文件
 
     time_list=[]
@@ -635,7 +636,7 @@ def scene_B(fai = 0, fai_1 = 0):
     else:
         sumoBinary = checkBinary('sumo-gui')
 
-    sumocfgfile = "E:\\Code\\github\\Daily\\note\\Risk_Assessment\\sumo\\scene_B\\4.sumocfg"  # sumocfg文件的位置
+    sumocfgfile = file_base + "\\scene_B\\4.sumocfg"  # sumocfg文件的位置
     traci.start([sumoBinary, "-c", sumocfgfile])  # 打开sumocfg文件
 
     time_list=[]
@@ -855,7 +856,7 @@ def scene_B_1(fai_ego = 0, fai_1 = 0):
     else:
         sumoBinary = checkBinary('sumo-gui')
 
-    sumocfgfile = "E:\\Code\\github\\Daily\\note\\Risk_Assessment\\sumo\\scene_B\\4.sumocfg"  # sumocfg文件的位置
+    sumocfgfile = file_base + "\\scene_B\\4.sumocfg"  # sumocfg文件的位置
     traci.start([sumoBinary, "-c", sumocfgfile])  # 打开sumocfg文件
 
     time_list=[]
@@ -1118,7 +1119,7 @@ def scene_C(fai = 0):
     else:
         sumoBinary = checkBinary('sumo-gui')
 
-    sumocfgfile = "E:\\Code\\github\\Daily\\note\\Risk_Assessment\\sumo\\scene_C\\3.sumocfg"  # sumocfg文件的位置
+    sumocfgfile = file_base + "\\scene_C\\3.sumocfg"  # sumocfg文件的位置
     traci.start([sumoBinary, "-c", sumocfgfile])  # 打开sumocfg文件
 
     time_list=[]
@@ -1471,7 +1472,7 @@ def scene_D():
     else:
         sumoBinary = checkBinary('sumo-gui')
 
-    sumocfgfile = "E:\\Code\\github\\Daily\\note\\Risk_Assessment\\sumo\\scene_D\\5.sumocfg"  # sumocfg文件的位置
+    sumocfgfile = file_base + "\\scene_D\\5.sumocfg"  # sumocfg文件的位置
     traci.start([sumoBinary, "-c", sumocfgfile])  # 打开sumocfg文件
 
     time_list=[]
@@ -1698,5 +1699,5 @@ def scene_D():
 
 
 if __name__ == "__main__":
-    scene_C()
+    scene_A()
 

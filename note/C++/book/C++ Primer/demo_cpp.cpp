@@ -2,7 +2,7 @@
  * 在学习的同时，进行实验
  */
 
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 // using namespace std;
 
 /// @brief 3.5.2 访问数组元素：实验两种不同的数组遍历方法
@@ -132,8 +132,61 @@ int test_2025_2_11_6(void){
     return 0;
 }
 
+/// @brief std::cerr
+/// @return 
+int test_2025_2_18_1(void){
+    std::cerr << "err test_2025_2_18_1" << std::endl;
+    return 0;
+}
+
+/// @brief throw
+/// @return 
+int test_2025_2_18_2(void){
+    throw std::runtime_error("err");    // #include <stdexcept>, 抛出异常会中止当前的程序
+    std::cout << "err test_2025_2_18_2" << std::endl;
+    return 0;
+}
+
+/// @brief throw会沿着程序的执行路径逐层回退，直到找到适当类型的catch子句为之
+/// @return 
+int test_2025_2_18_3(void){
+    try{
+        test_2025_2_18_2();
+    } catch (std::runtime_error err) {
+        std::cout << "err test_2025_2_18_3" << std::endl;//会执行
+    }
+    return 0;
+}
+
+int test_2025_2_18_4(void){
+    uint16_t a, b;
+    while(std::cin >> a >> b) {
+        try{
+            if (a+b == 10) {
+                std::cout << "Yes" << std::endl;
+            } else {
+                throw std::runtime_error("err test_2025_2_18_4");
+            }
+        } catch (std::runtime_error err) {
+            std::cout << err.what() << "\nTry Again? Enter y or n" << std::endl;
+            char c;
+            std::cin >> c;
+            if(!std::cin || c== 'n'){//!std::cin 等同于 std::cin.fail() || std::cin.eof() || std::cin.bad()
+                break;
+            }//bug: 只输入一个字符，只要不是'n'，就可以继续运行
+        }
+    }
+    return 0;
+}
+
+int test_2025_2_18_5(void){
+    uint16_t a,b;
+    std::cin >> a >> b;
+    std::cout << a/b << std::endl;
+    return 0;
+}
 /// @brief 主函数
 /// @return 
 int main(){
-    return test_2025_2_11_6();
+    return test_2025_2_18_5();
 }
