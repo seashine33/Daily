@@ -165,7 +165,7 @@ int test_2025_2_18_4(void){
             if (a+b == 10) {
                 std::cout << "Yes" << std::endl;
             } else {
-                throw std::runtime_error("err test_2025_2_18_4");
+                throw std::runtime_error("Err input");
             }
         } catch (std::runtime_error err) {
             std::cout << err.what() << "\nTry Again? Enter y or n" << std::endl;
@@ -180,13 +180,14 @@ int test_2025_2_18_4(void){
 }
 
 int test_2025_2_18_5(void){
-    uint16_t a,b;
+    float a,b;
     std::cin >> a >> b;
     std::cout << a/b << std::endl;
     return 0;
 }
+
 /// @brief 主函数
 /// @return 
 int main(){
-    return test_2025_2_18_5();
+    return test_2025_2_18_4();
 }
