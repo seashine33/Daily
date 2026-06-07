@@ -396,6 +396,7 @@ void runoob_set()
 int main()
 {
     // https://www.runoob.com/cplusplus/cpp-tutorial.html
+    //匿名函数    //https://www.runoob.com/cplusplus/cpp-functions.html
     // runoob_strings();//字符串
     // runoob_references();//引用
     // runoob_basic_input_output();//基本的输入输出
